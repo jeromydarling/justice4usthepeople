@@ -48,9 +48,9 @@ export function Logo({
   );
 }
 
-// Renders the SVG file with a basePath-prefixed src.
-// Plain <img> is used (not next/image) because the static-export build of
-// next/image with basePath is unreliable on GitHub Pages project deployments.
+// Renders the original artwork via <picture> — WebP for modern browsers
+// (small) with a PNG fallback (universal). basePath-prefixed src so the
+// asset resolves correctly under GitHub Pages project deployments.
 export function BrandMark({
   mark = "loon",
   className = ""
@@ -58,11 +58,16 @@ export function BrandMark({
   mark?: LogoMark;
   className?: string;
 }) {
-  const src = asset(mark === "scales" ? "/brand/logo-scales.svg" : "/brand/logo.svg");
+  const base = mark === "scales" ? "/brand/logo-scales" : "/brand/logo-loon";
   const alt =
     mark === "scales"
       ? "Justice 4 Us The People — scales"
       : "Justice 4 Us The People — loon rising with north star";
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt={alt} className={className} loading="eager" />;
+  return (
+    <picture>
+      <source srcSet={asset(`${base}.webp`)} type="image/webp" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={asset(`${base}.png`)} alt={alt} className={className} loading="eager" />
+    </picture>
+  );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BrandMark } from "@/components/Logo";
 import { SectionHeader } from "@/components/SectionHeader";
 import { ProgramCard, Arrow } from "@/components/ProgramCard";
+import { MapPreview } from "@/components/MapPreview";
 import { programs } from "@/lib/programs";
 import { site } from "@/lib/site";
 import { sortEvents, formatDate, formatTime, icsHref } from "@/lib/events";
@@ -130,7 +131,7 @@ export default function HomePage() {
           </div>
           <div className="md:col-span-7">
             <div className="aspect-[5/4] overflow-hidden rounded-2xl bg-indigo-800 ring-1 ring-bone-50/10">
-              <MapPreviewSVG />
+              <MapPreview fallback={<MapPreviewSVG />} />
             </div>
           </div>
         </div>

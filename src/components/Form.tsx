@@ -1,11 +1,11 @@
 "use client";
 import { ReactNode, useState, FormEvent } from "react";
 import clsx from "clsx";
+import { site } from "@/lib/site";
 
-// A small set of form primitives that look hand-built and dignified —
-// nothing about them should remind a visitor of a Google Form. They post to a
-// Formspree (or Formspree-compatible) endpoint via plain fetch, which keeps
-// us 100% static-export-friendly for GitHub Pages.
+// Form primitives that look hand-built and dignified — not Google-form-ish.
+// They POST to a single Cloudflare Worker endpoint (see /worker), which
+// creates a GitHub Issue per submission. 100% static-export-friendly.
 
 export type FormField =
   | {
@@ -43,7 +43,7 @@ export type FormField =
     };
 
 export function EmbeddedForm({
-  endpoint,
+  formId,
   subject,
   fields,
   submitLabel = "Send",
@@ -51,7 +51,7 @@ export function EmbeddedForm({
   hiddenFields = {},
   className
 }: {
-  endpoint: string;
+  formId: string;
   subject: string;
   fields: FormField[];
   submitLabel?: string;
@@ -59,6 +59,7 @@ export function EmbeddedForm({
   hiddenFields?: Record<string, string>;
   className?: string;
 }) {
+  const endpoint = site.formEndpoint;
   const [state, setState] = useState<
     | { status: "idle" }
     | { status: "submitting" }
@@ -67,7 +68,7 @@ export function EmbeddedForm({
   >({ status: "idle" });
 
   const configured =
-    !!endpoint && !endpoint.includes("xxxxxxxx") && endpoint.startsWith("http");
+    !!endpoint && endpoint.startsWith("http") && !endpoint.includes("xxx");
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -75,7 +76,7 @@ export function EmbeddedForm({
       setState({
         status: "error",
         message:
-          "This form isn't connected yet. Set the matching NEXT_PUBLIC_FORMSPREE_* env var and rebuild."
+          "Forms aren't connected yet. Set NEXT_PUBLIC_FORM_ENDPOINT to your Worker URL and rebuild."
       });
       return;
     }
@@ -118,6 +119,7 @@ export function EmbeddedForm({
       className={clsx("card flex flex-col gap-5 p-6 md:p-8", className)}
       noValidate
     >
+      <input type="hidden" name="_form" value={formId} />
       <input type="hidden" name="_subject" value={subject} />
       {Object.entries(hiddenFields).map(([k, v]) => (
         <input key={k} type="hidden" name={k} value={v} />
@@ -250,15 +252,18 @@ function Required() {
   );
 }
 
-// A small inline note shown above forms when env keys aren't set yet.
-export function FormConnectionNote({ endpoint, envVar }: { endpoint: string; envVar: string }) {
+// Inline note shown above a form when the Worker endpoint isn't configured.
+export function FormConnectionNote() {
   const configured =
-    !!endpoint && !endpoint.includes("xxxxxxxx") && endpoint.startsWith("http");
+    !!site.formEndpoint &&
+    site.formEndpoint.startsWith("http") &&
+    !site.formEndpoint.includes("xxx");
   if (configured) return null;
   return (
     <p className="mb-3 rounded-lg border border-ember-300/60 bg-ember-50 px-3 py-2 text-xs text-ember-700">
-      <strong>Setup:</strong> set <code>{envVar}</code> to your Formspree
-      endpoint URL and rebuild to activate this form.
+      <strong>Setup:</strong> set <code>NEXT_PUBLIC_FORM_ENDPOINT</code> to
+      your Cloudflare Worker URL (see <code>/worker</code>) and rebuild to
+      activate forms.
     </p>
   );
 }

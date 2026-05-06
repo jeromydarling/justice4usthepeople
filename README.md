@@ -24,7 +24,7 @@ zero infrastructure:
 
 | Concern | Service | How |
 |---|---|---|
-| Form submissions | [Formspree](https://formspree.io) | One endpoint per form — set `NEXT_PUBLIC_FORMSPREE_*` |
+| Form submissions | **Cloudflare Worker** (open source, in `/worker`) | One endpoint, creates GitHub Issues — set `NEXT_PUBLIC_FORM_ENDPOINT` |
 | Donations + store | [Stripe Payment Links](https://stripe.com/payments/payment-links) | Create the link in Stripe, paste URL into env |
 | News | [rss2json.com](https://rss2json.com) | Client-side RSS, no API key needed for low volume |
 | Map | [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/) | Free tier — set `NEXT_PUBLIC_MAPBOX_TOKEN` |
@@ -52,8 +52,7 @@ in the UI** so you know exactly which key is missing — nothing breaks.
      file each deploy (e.g. `justice4usthepeople.org`).
 
    **Repository secrets** (all optional — set as you go)
-   - `FORMSPREE_GENERAL`, `FORMSPREE_RENTAL`, `FORMSPREE_FOOD`,
-     `FORMSPREE_LEGAL`, `FORMSPREE_VOLUNTEER`, `FORMSPREE_MEMBERSHIP`
+   - `FORM_ENDPOINT` — Cloudflare Worker URL from `/worker` deploy
    - `STRIPE_DONATE_25`, `STRIPE_DONATE_50`, `STRIPE_DONATE_100`,
      `STRIPE_DONATE_250`, `STRIPE_DONATE_CUSTOM`,
      `STRIPE_MEMBERSHIP_MONTHLY`, `STRIPE_MEMBERSHIP_ANNUAL`,
@@ -118,10 +117,13 @@ The current relief application Google Forms map to these new embedded forms:
 | Legal resources | `/get-help/legal` | `legalForm` |
 | Volunteer / contact | `/take-action`, `/contact` | `volunteerForm`, `contactForm` |
 
-Each form posts directly to its Formspree endpoint with a honeypot, success
-state, and accessible labels. **Compare each form's fields to the live Google
-Form** and tweak `program-forms.ts` to match — labels and required flags are
-plain TypeScript and shouldn't take more than a few minutes per form.
+All forms POST to **one** Cloudflare Worker endpoint (see [`/worker`](./worker))
+which creates a labeled GitHub Issue per submission in a private submissions
+repo. No third-party form service, no email vendor — your data lives in GitHub.
+
+**Compare each form's fields to the live Google Form** and tweak
+`program-forms.ts` — labels and required flags are plain TypeScript and
+shouldn't take more than a few minutes per form.
 
 ---
 

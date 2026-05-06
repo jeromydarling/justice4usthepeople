@@ -23,17 +23,14 @@ export const site = {
     bluesky: "https://bsky.app/profile/justice4usthepeople.org"
   },
   // Original donate channel — used as fallback / supplementary CTA.
-  gofundmeUrl: "https://gofund.me/4a87ee1d7"
+  gofundmeUrl: "https://gofund.me/4a87ee1d7",
+  // Single endpoint for all form submissions. Points to our Cloudflare
+  // Worker (see /worker). Each form passes a different `_form` field so the
+  // Worker can label / route as needed.
+  formEndpoint: process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? ""
 };
 
-export const formspree = {
-  general: process.env.NEXT_PUBLIC_FORMSPREE_GENERAL ?? "",
-  rental: process.env.NEXT_PUBLIC_FORMSPREE_RENTAL ?? "",
-  food: process.env.NEXT_PUBLIC_FORMSPREE_FOOD ?? "",
-  legal: process.env.NEXT_PUBLIC_FORMSPREE_LEGAL ?? "",
-  volunteer: process.env.NEXT_PUBLIC_FORMSPREE_VOLUNTEER ?? "",
-  membership: process.env.NEXT_PUBLIC_FORMSPREE_MEMBERSHIP ?? ""
-};
+// (formspree config removed — see formEndpoint above)
 
 export const stripeLinks = {
   donate: {
@@ -52,6 +49,7 @@ export const stripeLinks = {
 export type NavItem = { label: string; href: string };
 export const primaryNav: NavItem[] = [
   { label: "Our Values", href: "/values" },
+  { label: "Events", href: "/events" },
   { label: "Get Help", href: "/get-help" },
   { label: "News", href: "/news" },
   { label: "Take Action", href: "/take-action" },

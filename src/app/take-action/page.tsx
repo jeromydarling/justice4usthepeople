@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 import { EmbeddedForm, FormConnectionNote } from "@/components/Form";
 import { volunteerForm } from "@/lib/program-forms";
-import { formspree, site } from "@/lib/site";
+import { site } from "@/lib/site";
 import { Arrow } from "@/components/ProgramCard";
 
 export const metadata: Metadata = {
@@ -80,9 +80,9 @@ export default function TakeActionPage() {
             </p>
           </div>
           <div className="md:col-span-7">
-            <FormConnectionNote endpoint={formspree.volunteer} envVar="NEXT_PUBLIC_FORMSPREE_VOLUNTEER" />
+            <FormConnectionNote />
             <EmbeddedForm
-              endpoint={formspree.volunteer}
+              formId="volunteer"
               subject="[Volunteer] new signup"
               fields={volunteerForm}
               submitLabel="Count me in"

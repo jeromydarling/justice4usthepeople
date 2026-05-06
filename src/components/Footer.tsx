@@ -24,7 +24,10 @@ export function Footer() {
             <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/values">Our Values</Link></li>
             <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/events">Events</Link></li>
             <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/get-help">Get Help</Link></li>
+            <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/find-loved-one">If a loved one was detained</Link></li>
             <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/news">News &amp; Updates</Link></li>
+            <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/stories">Stories</Link></li>
+            <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/partners">Coalition partners</Link></li>
             <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/take-action">Take Action</Link></li>
             <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/store">Store</Link></li>
             <li><Link className="text-bone-100 no-underline hover:text-ember-200" href="/donate">Donate</Link></li>

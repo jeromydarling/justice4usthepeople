@@ -20,6 +20,12 @@ export default function GetHelpPage() {
           title="A living map of where to turn."
           lede="Curated by neighbors who use these resources. Tap a category to filter; tap a marker to see hours, languages, and a direct phone number."
         />
+        <Link
+          href="/find-loved-one"
+          className="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-ember-300 bg-ember-50 px-4 py-2 text-sm font-medium text-ember-700 no-underline transition hover:bg-ember-100"
+        >
+          If a loved one was just detained → here are the next steps
+        </Link>
         <div id="map" className="mt-10">
           <ResourceMap />
         </div>

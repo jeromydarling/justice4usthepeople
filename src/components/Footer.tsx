@@ -1,10 +1,27 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { NewsletterSignup } from "./NewsletterSignup";
 import { site } from "@/lib/site";
 
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-ink/10 bg-indigo-900 text-bone-100">
+      <div className="container-wide border-b border-bone-100/10 py-10">
+        <div className="grid items-center gap-6 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <p className="eyebrow text-ember-200">Weekly briefing</p>
+            <p className="mt-2 font-serif text-2xl text-bone-50">
+              Stay close to the work.
+            </p>
+            <p className="mt-1 text-sm text-bone-200/80">
+              A short note once a week. Unsubscribe any time.
+            </p>
+          </div>
+          <div className="md:col-span-7">
+            <NewsletterSignup variant="inline" />
+          </div>
+        </div>
+      </div>
       <div className="container-wide grid gap-10 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <Logo variant="light" />

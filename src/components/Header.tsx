@@ -10,7 +10,8 @@ export function Header() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-bone-50/85 backdrop-blur">
-      <div className="container-wide flex items-center justify-between gap-6 py-4">
+      {/* Row 1: logo · nav · utilities (search, lang, mobile menu) */}
+      <div className="container-wide flex items-center justify-between gap-6 py-3">
         <Logo />
         <nav className="hidden items-center gap-7 md:flex">
           {primaryNav.map((item) => (
@@ -26,15 +27,6 @@ export function Header() {
         <div className="flex items-center gap-2">
           <SiteSearch />
           <LangSwitcher />
-          <Link href="/donate" className="hidden md:inline-flex btn-ember">
-            Donate
-          </Link>
-          <Link
-            href="/membership"
-            className="hidden md:inline-flex btn-primary"
-          >
-            Become a member
-          </Link>
           <button
             type="button"
             aria-label="Open menu"
@@ -53,6 +45,18 @@ export function Header() {
           </button>
         </div>
       </div>
+      {/* Row 2: right-aligned action buttons (desktop only). */}
+      <div className="hidden border-t border-ink/5 md:block">
+        <div className="container-wide flex items-center justify-end gap-2 py-2">
+          <Link href="/donate" className="btn-ember">
+            Donate
+          </Link>
+          <Link href="/membership" className="btn-primary">
+            Become a member
+          </Link>
+        </div>
+      </div>
+      {/* Mobile menu */}
       {open && (
         <div className="border-t border-ink/10 bg-bone-50 md:hidden">
           <nav className="container-wide flex flex-col gap-1 py-3">

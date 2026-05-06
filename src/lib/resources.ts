@@ -26,6 +26,10 @@ export type Resource = {
   hours?: string;
   languages?: string[];
   coords: [number, number];
+  // ISO date (YYYY-MM-DD). Bumped manually by the team when they verify the
+  // resource is current. The check-resource-urls script flags resources whose
+  // verifiedAt is older than 180 days OR whose URL no longer responds.
+  verifiedAt?: string;
 };
 
 export const categories: Record<

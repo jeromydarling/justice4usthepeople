@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Logo } from "./Logo";
 import { LangSwitcher } from "./LangSwitcher";
+import { SiteSearch } from "./SiteSearch";
 import { primaryNav } from "@/lib/site";
 
 export function Header() {
@@ -23,6 +24,7 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <SiteSearch />
           <LangSwitcher />
           <Link href="/donate" className="hidden md:inline-flex btn-ember">
             Donate

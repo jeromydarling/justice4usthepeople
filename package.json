@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "check-resources": "tsx scripts/check-resource-urls.ts"
+    "check-resources": "tsx scripts/check-resource-urls.ts",
+    "build-search-index": "tsx scripts/build-search-index.ts",
+    "prebuild": "tsx scripts/build-search-index.ts"
   },
   "dependencies": {
     "next": "15.0.3",

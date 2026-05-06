@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Arrow } from "@/components/ProgramCard";
+import { asset } from "@/lib/asset";
 import {
   events as allEvents,
   sortEvents,
@@ -202,8 +202,9 @@ function EventCard({
             <ul className="flex flex-wrap items-center gap-5">
               {event.partners.map((p) => (
                 <li key={p.name} className="flex items-center gap-2">
-                  <Image
-                    src={p.logo}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={asset(p.logo)}
                     alt={p.name}
                     width={36}
                     height={36}

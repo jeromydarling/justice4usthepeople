@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { site } from "@/lib/site";
+import { asset } from "@/lib/asset";
 
 export type LogoMark = "loon" | "scales";
 
@@ -25,7 +25,6 @@ export function Logo({
   const isLight = variant === "light";
   const fg = isLight ? "text-bone-50" : "text-indigo-900";
   const subFg = isLight ? "text-ember-200" : "text-ember-700";
-  const wm = mark === "scales" && !showWordmark ? false : showWordmark;
   return (
     <Link
       href="/"
@@ -33,7 +32,7 @@ export function Logo({
       className={`group inline-flex items-center gap-3 no-underline ${className}`}
     >
       <BrandMark mark={mark} className={mark === "scales" ? "h-12 w-12 shrink-0" : "h-10 w-10 shrink-0"} />
-      {wm && (
+      {showWordmark && (
         <span className="flex flex-col leading-none">
           <span className={`font-serif text-lg tracking-tight ${fg}`}>
             Justice <span className="text-ember-500">4</span> Us The People
@@ -49,7 +48,9 @@ export function Logo({
   );
 }
 
-// Renders the actual SVG file. Static export friendly.
+// Renders the SVG file with a basePath-prefixed src.
+// Plain <img> is used (not next/image) because the static-export build of
+// next/image with basePath is unreliable on GitHub Pages project deployments.
 export function BrandMark({
   mark = "loon",
   className = ""
@@ -57,19 +58,11 @@ export function BrandMark({
   mark?: LogoMark;
   className?: string;
 }) {
-  const src = mark === "scales" ? "/brand/logo-scales.svg" : "/brand/logo.svg";
+  const src = asset(mark === "scales" ? "/brand/logo-scales.svg" : "/brand/logo.svg");
   const alt =
     mark === "scales"
       ? "Justice 4 Us The People — scales"
       : "Justice 4 Us The People — loon rising with north star";
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      width={mark === "scales" ? 120 : 100}
-      height={mark === "scales" ? 120 : 100}
-      className={className}
-      priority
-    />
-  );
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt={alt} className={className} loading="eager" />;
 }

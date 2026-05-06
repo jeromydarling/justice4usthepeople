@@ -90,18 +90,18 @@ export function SiteSearch() {
         type="button"
         aria-label="Search the site"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-bone-50 px-3 py-1.5 text-xs font-medium text-ink/70 hover:bg-ink/5"
+        className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-bone-50 px-2.5 py-1.5 text-xs font-medium text-ink/70 hover:bg-ink/5 lg:px-3"
       >
         <SearchIcon />
-        <span className="hidden sm:inline">Search</span>
-        <kbd className="hidden rounded border border-ink/15 bg-bone-100 px-1 text-[10px] text-ink-muted sm:inline">
+        <span className="hidden lg:inline">Search</span>
+        <kbd className="hidden rounded border border-ink/15 bg-bone-100 px-1 text-[10px] text-ink-muted lg:inline">
           ⌘K
         </kbd>
       </button>
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-ink/40 px-4 pt-20 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-ink/40 px-4 pt-12 backdrop-blur-sm sm:pt-20"
           onClick={() => setOpen(false)}
         >
           <div

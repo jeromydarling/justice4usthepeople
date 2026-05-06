@@ -112,7 +112,7 @@ export default function KYRPage() {
         <ol className="grid gap-8">
           {scenarios.map((s, i) => (
             <li key={s.id} className="card overflow-hidden p-0 print:break-inside-avoid">
-              <div className="flex items-center gap-4 bg-indigo-900 px-6 py-4 text-bone-50">
+              <div className="flex items-center gap-3 bg-indigo-900 px-4 py-3 text-bone-50 sm:gap-4 sm:px-6 sm:py-4">
                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-ember-400 font-serif text-ink">
                   {i + 1}
                 </span>

@@ -628,7 +628,7 @@ function DigestComposer() {
               {subject}
             </p>
             <p className="mt-3 text-sm text-ink-muted">Body</p>
-            <pre className="mt-1 max-h-[400px] overflow-auto whitespace-pre-wrap rounded-lg bg-bone-100 p-3 text-xs leading-relaxed text-ink">
+            <pre className="mt-1 max-h-[280px] overflow-auto whitespace-pre-wrap rounded-lg bg-bone-100 p-3 text-xs leading-relaxed text-ink sm:max-h-[400px]">
               {body}
             </pre>
 

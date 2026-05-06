@@ -29,7 +29,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/10 bg-bone-50/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-ink/10 bg-bone-50/85 backdrop-blur print:hidden">
       <div className="container-wide flex items-center justify-between gap-6 py-3">
         <Logo />
         <div ref={navRef} className="hidden items-center gap-1 md:flex">

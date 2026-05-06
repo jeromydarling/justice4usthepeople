@@ -47,7 +47,7 @@ const groups: Group[] = [
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-ink/10 bg-indigo-900 text-bone-100">
+    <footer className="mt-24 border-t border-ink/10 bg-indigo-900 text-bone-100 print:hidden">
       {/* Newsletter band */}
       <div className="container-wide border-b border-bone-100/10 py-10">
         <div className="grid items-center gap-6 md:grid-cols-12">

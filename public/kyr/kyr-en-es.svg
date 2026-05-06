@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="1100" viewBox="0 0 850 1100">
+  <style>
+    .h1 { font: 700 30px Georgia, serif; fill: #1a2547; }
+    .h2 { font: 600 14px Georgia, serif; fill: #1a2547; letter-spacing: 2px; }
+    .h3 { font: 700 16px Georgia, serif; fill: #1a2547; }
+    .body { font: 400 11px -apple-system, sans-serif; fill: #14171c; }
+    .body-em { font: 600 11px -apple-system, sans-serif; fill: #1a2547; }
+    .footer-em { font: 700 14px -apple-system, sans-serif; fill: #fbf8f2; }
+    .footer { font: 400 11px -apple-system, sans-serif; fill: #fbf8f2; }
+    .tag { font: 600 10px -apple-system, sans-serif; fill: #fbf8f2; letter-spacing: 1px; }
+    .ember { fill: #dc972f; }
+    .scene { fill: #f4f0e7; stroke: #d8d0bd; stroke-width: 1; }
+  </style>
+  <rect width="850" height="1100" fill="#fbf8f2"/>
+
+  <!-- Header band -->
+  <rect width="850" height="120" fill="#1a2547"/>
+  <text x="40" y="50" class="tag" fill="#dc972f">KNOW YOUR RIGHTS &#x2022; CONOZCA SUS DERECHOS</text>
+  <text x="40" y="92" class="h1" fill="#fbf8f2">What to say. What to sign. What to do.</text>
+  <text x="40" y="112" class="footer">Qué decir. Qué firmar. Qué hacer.</text>
+
+  <!-- Scenario 1 -->
+  <rect x="30" y="150" width="790" height="270" class="scene" rx="10"/>
+  <text x="50" y="186" class="h2">1 &#x2022; AT THE DOOR &#x2022; EN LA PUERTA</text>
+  <line x1="50" y1="200" x2="800" y2="200" stroke="#dc972f" stroke-width="2"/>
+  <g transform="translate(50,228)">
+    <text class="h3">English</text>
+    <text y="28" class="body">• You do not have to open the door. Officers need a</text>
+    <text y="44" class="body">  judicial warrant signed by a judge — an ICE</text>
+    <text y="60" class="body">  administrative warrant is not enough.</text>
+    <text y="84" class="body">• Ask them to slip the warrant under the door.</text>
+    <text y="100" class="body">  Look for a judge's signature and your address.</text>
+    <text y="124" class="body-em">• Say: "I do not consent to a search. I am</text>
+    <text y="140" class="body-em">  exercising my right to remain silent."</text>
+    <text y="164" class="body">• Do not sign anything you don't understand.</text>
+  </g>
+  <g transform="translate(440,228)">
+    <text class="h3">Español</text>
+    <text y="28" class="body">• No tiene que abrir la puerta. Los agentes</text>
+    <text y="44" class="body">  necesitan una orden judicial firmada por un</text>
+    <text y="60" class="body">  juez — una orden de ICE no es suficiente.</text>
+    <text y="84" class="body">• Pídales que pasen la orden por debajo de la</text>
+    <text y="100" class="body">  puerta. Verifique firma del juez y la dirección.</text>
+    <text y="124" class="body-em">• Diga: "No doy consentimiento para registro.</text>
+    <text y="140" class="body-em">  Ejerzo mi derecho a guardar silencio."</text>
+    <text y="164" class="body">• No firme nada que no entienda.</text>
+  </g>
+
+  <!-- Scenario 2 -->
+  <rect x="30" y="440" width="790" height="270" class="scene" rx="10"/>
+  <text x="50" y="476" class="h2">2 &#x2022; CAR STOP &#x2022; SI LA PARA LA POLICÍA</text>
+  <line x1="50" y1="490" x2="800" y2="490" stroke="#dc972f" stroke-width="2"/>
+  <g transform="translate(50,518)">
+    <text class="h3">English</text>
+    <text y="28" class="body">• Pull over safely. Keep your hands visible.</text>
+    <text y="44" class="body">• Driver must show license, registration, insurance.</text>
+    <text y="68" class="body">• Passengers do not have to answer questions</text>
+    <text y="84" class="body">  about immigration status.</text>
+    <text y="108" class="body-em">• Say: "I want to remain silent."</text>
+    <text y="132" class="body">• Do not lie. Do not show false documents.</text>
+    <text y="156" class="body-em">• Ask: "Am I free to go?"</text>
+  </g>
+  <g transform="translate(440,518)">
+    <text class="h3">Español</text>
+    <text y="28" class="body">• Estaciónese en un lugar seguro. Manos visibles.</text>
+    <text y="44" class="body">• El conductor muestra licencia, registro, seguro.</text>
+    <text y="68" class="body">• Los pasajeros no tienen que responder</text>
+    <text y="84" class="body">  preguntas sobre su estatus migratorio.</text>
+    <text y="108" class="body-em">• Diga: "Quiero permanecer en silencio."</text>
+    <text y="132" class="body">• No mienta. No muestre documentos falsos.</text>
+    <text y="156" class="body-em">• Pregunte: "¿Estoy libre para irme?"</text>
+  </g>
+
+  <!-- Scenario 3 -->
+  <rect x="30" y="730" width="790" height="270" class="scene" rx="10"/>
+  <text x="50" y="766" class="h2">3 &#x2022; AT WORK &#x2022; EN EL TRABAJO</text>
+  <line x1="50" y1="780" x2="800" y2="780" stroke="#dc972f" stroke-width="2"/>
+  <g transform="translate(50,808)">
+    <text class="h3">English</text>
+    <text y="28" class="body">• Your employer cannot let agents into</text>
+    <text y="44" class="body">  non-public areas without a judicial warrant.</text>
+    <text y="68" class="body-em">• You have the right to remain silent.</text>
+    <text y="92" class="body">• Ask for a lawyer before answering questions</text>
+    <text y="108" class="body">  about where you were born or how you entered.</text>
+    <text y="132" class="body">• Note names, badges, vehicles. Call the hotline</text>
+    <text y="148" class="body">  as soon as it's safe.</text>
+  </g>
+  <g transform="translate(440,808)">
+    <text class="h3">Español</text>
+    <text y="28" class="body">• Su empleador no puede permitir el acceso a</text>
+    <text y="44" class="body">  áreas no públicas sin una orden judicial.</text>
+    <text y="68" class="body-em">• Tiene derecho a permanecer en silencio.</text>
+    <text y="92" class="body">• Pida un abogado antes de responder preguntas</text>
+    <text y="108" class="body">  sobre dónde nació o cómo entró al país.</text>
+    <text y="132" class="body">• Anote nombres, placas, vehículos. Llame a la</text>
+    <text y="148" class="body">  línea directa tan pronto sea seguro.</text>
+  </g>
+
+  <!-- Footer band -->
+  <rect x="0" y="1020" width="850" height="80" fill="#1a2547"/>
+  <text x="40" y="1055" class="footer-em">Justice 4 Us The People — 24-hour hotline:</text>
+  <text x="40" y="1080" class="footer">If it's happening right now: <tspan class="footer-em">612-424-1785</tspan> &#x2022; justice4usthepeople.org</text>
+  <text x="500" y="1080" class="footer">Si está sucediendo ahora: <tspan class="footer-em">612-424-1785</tspan></text>
+</svg>

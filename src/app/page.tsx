@@ -311,15 +311,20 @@ function Backdrop() {
   );
 }
 
-// The hero emblem — large circular brand mark with a typographic radial.
+// Hero emblem — the loon mark is already a complete emblem (its own navy
+// ring + star); we let it stand on the page without an extra frame, with a
+// soft radial halo behind it and the rallying text curving around it on the
+// cream page.
 function HeroEmblem() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-md">
-      <div className="absolute inset-0 rounded-full bg-indigo-900" />
-      <div className="absolute inset-3 rounded-full ring-1 ring-bone-50/20" />
-      <div className="absolute inset-0 grid place-items-center">
-        <BrandMark className="h-2/3 w-2/3" />
+      {/* Soft halo */}
+      <div className="absolute inset-[10%] rounded-full bg-gradient-to-b from-bone-50 to-ember-100/40 blur-2xl" />
+      {/* The loon (transparent corners, sits flat on the page) */}
+      <div className="absolute inset-[8%] grid place-items-center">
+        <BrandMark className="h-full w-full" />
       </div>
+      {/* Rallying text curving around the outside */}
       <RadialText
         text="JUSTICE · 4 · US · THE · PEOPLE · STAND · IN · SOLIDARITY · WITH · MINNESOTA · "
       />
@@ -335,12 +340,15 @@ function RadialText({ text }: { text: string }) {
       aria-hidden
     >
       <defs>
-        <path id="circlePath" d="M200,200 m-170,0 a170,170 0 1,1 340,0 a170,170 0 1,1 -340,0" />
+        <path
+          id="circlePath"
+          d="M200,200 m-186,0 a186,186 0 1,1 372,0 a186,186 0 1,1 -372,0"
+        />
       </defs>
       <text
-        fill="#f1cf8e"
+        fill="#22304d"
         fontFamily="Inter, sans-serif"
-        fontSize="13"
+        fontSize="11"
         fontWeight="600"
         letterSpacing="6"
       >

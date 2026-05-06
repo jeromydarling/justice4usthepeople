@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "check-resources": "tsx scripts/check-resource-urls.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
-    "prebuild": "tsx scripts/build-search-index.ts"
+    "prebuild": "tsx scripts/build-search-index.ts",
+    "promo:music": "tsx scripts/generate-promo-music.ts",
+    "promo:render": "cd promo && npx -y hyperframes render --input composition.html --output ./out/promo.mp4"
   },
   "dependencies": {
     "next": "15.0.3",

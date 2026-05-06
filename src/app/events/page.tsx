@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Arrow } from "@/components/ProgramCard";
+import { EventMap } from "@/components/EventMap";
 import { asset } from "@/lib/asset";
 import {
   events as allEvents,
@@ -223,31 +224,10 @@ function EventCard({
         )}
       </div>
 
-      {/* Map preview column */}
+      {/* Map column — real Mapbox tile via Static Images API. */}
       <div className="relative bg-bone-100 md:col-span-3">
-        <EventMapPreview event={event} />
+        <EventMap event={event} />
       </div>
     </article>
-  );
-}
-
-function EventMapPreview({ event }: { event: EventItem }) {
-  // A static, hand-drawn map preview. A live Mapbox preview here would be
-  // overkill for many events on the page; the marker on /get-help already
-  // provides a real interactive view. We link out for directions instead.
-  return (
-    <div className="flex h-full min-h-[180px] flex-col items-center justify-center p-6 text-center">
-      <svg viewBox="0 0 120 120" className="h-20 w-20 text-indigo-700" aria-hidden>
-        <circle cx="60" cy="55" r="22" fill="currentColor" opacity="0.15" />
-        <path
-          d="M60 18c-12 0-22 9-22 22 0 16 22 42 22 42s22-26 22-42c0-13-10-22-22-22zm0 32a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"
-          fill="currentColor"
-        />
-      </svg>
-      <p className="mt-3 text-sm font-medium text-ink">{event.location.name}</p>
-      {event.location.city && (
-        <p className="text-xs text-ink-muted">{event.location.city}</p>
-      )}
-    </div>
   );
 }

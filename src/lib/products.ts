@@ -21,8 +21,9 @@ export const products: Product[] = [
     price: "$35",
     blurb:
       "Heavyweight, all-weather yard sign with our two-color mark. Ships with steel H-stake. Made in Minnesota.",
-    inStock: true,
+    inStock: false,
     art: "linear-gradient(135deg, #1a2540 0%, #3a4d77 60%, #dc972f 60%, #e7b257 100%)",
+    imageSrc: "/store/ice-out-yard-sign.svg",
     paymentLink: process.env.NEXT_PUBLIC_STRIPE_YARDSIGN ?? "",
     envVar: "NEXT_PUBLIC_STRIPE_YARDSIGN"
   },

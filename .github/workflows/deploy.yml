@@ -36,13 +36,8 @@ jobs:
           # Empty for custom domain (CNAME); set to '/repo-name' for project pages
           NEXT_PUBLIC_BASE_PATH: ${{ vars.BASE_PATH }}
 
-          # Forms — Formspree endpoints
-          NEXT_PUBLIC_FORMSPREE_GENERAL: ${{ secrets.FORMSPREE_GENERAL }}
-          NEXT_PUBLIC_FORMSPREE_RENTAL: ${{ secrets.FORMSPREE_RENTAL }}
-          NEXT_PUBLIC_FORMSPREE_FOOD: ${{ secrets.FORMSPREE_FOOD }}
-          NEXT_PUBLIC_FORMSPREE_LEGAL: ${{ secrets.FORMSPREE_LEGAL }}
-          NEXT_PUBLIC_FORMSPREE_VOLUNTEER: ${{ secrets.FORMSPREE_VOLUNTEER }}
-          NEXT_PUBLIC_FORMSPREE_MEMBERSHIP: ${{ secrets.FORMSPREE_MEMBERSHIP }}
+          # Forms — single Cloudflare Worker endpoint (see /worker)
+          NEXT_PUBLIC_FORM_ENDPOINT: ${{ secrets.FORM_ENDPOINT }}
 
           # Stripe — Payment Link URLs
           NEXT_PUBLIC_STRIPE_DONATE_25: ${{ secrets.STRIPE_DONATE_25 }}

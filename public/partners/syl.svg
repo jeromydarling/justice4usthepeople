@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" role="img" aria-label="Somali Youth Link (S.Y.L.)">
+  <defs>
+    <linearGradient id="sylNavy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#23427a"/>
+      <stop offset="100%" stop-color="#0f1f47"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Shield -->
+  <path d="M 24 18 L 176 18 L 176 150 C 176 200 100 230 100 230 C 100 230 24 200 24 150 Z"
+        fill="url(#sylNavy)"/>
+
+  <!-- Lion head silhouette -->
+  <g fill="#fbf8f2">
+    <!-- Mane -->
+    <path d="M 100 56
+             C 70 56 52 76 52 100
+             C 52 110 56 118 60 124
+             C 56 132 56 140 62 144
+             L 70 142
+             C 72 150 80 154 88 154
+             L 88 162 L 112 162 L 112 154
+             C 120 154 128 150 130 142
+             L 138 144
+             C 144 140 144 132 140 124
+             C 144 118 148 110 148 100
+             C 148 76 130 56 100 56 Z"/>
+    <!-- Face mask -->
+    <path d="M 84 102 C 84 92 92 86 100 86 C 108 86 116 92 116 102 C 116 116 108 124 100 124 C 92 124 84 116 84 102 Z"
+          fill="#0f1f47"/>
+    <!-- Eyes -->
+    <circle cx="94" cy="100" r="1.8" fill="#fbf8f2"/>
+    <circle cx="106" cy="100" r="1.8" fill="#fbf8f2"/>
+    <!-- Nose/mouth -->
+    <path d="M 96 110 L 100 116 L 104 110 Z" fill="#fbf8f2"/>
+  </g>
+
+  <!-- Red banner -->
+  <rect x="24" y="166" width="152" height="22" fill="#b3132d"/>
+  <text x="100" y="182" text-anchor="middle"
+        font-family="Inter, Arial, sans-serif" font-weight="800"
+        font-size="11" fill="#fbf8f2" letter-spacing="1">
+    SOMALI YOUTH LINK
+  </text>
+
+  <!-- Bottom three-color bar -->
+  <rect x="24" y="190" width="50" height="22" fill="#0f1f47"/>
+  <rect x="74" y="190" width="52" height="22" fill="#fbf8f2"/>
+  <rect x="126" y="190" width="50" height="22" fill="#b3132d"/>
+
+  <!-- Stars and S.Y.L. -->
+  <g fill="#dc972f">
+    <path d="M 40 198 L 42 202 L 46 202 L 43 205 L 44 209 L 40 207 L 36 209 L 37 205 L 34 202 L 38 202 Z"/>
+    <path d="M 160 198 L 162 202 L 166 202 L 163 205 L 164 209 L 160 207 L 156 209 L 157 205 L 154 202 L 158 202 Z"/>
+  </g>
+  <text x="100" y="207" text-anchor="middle"
+        font-family="Inter, Arial, sans-serif" font-weight="800"
+        font-size="11" fill="#0f1f47" letter-spacing="2">
+    S. Y. L.
+  </text>
+</svg>

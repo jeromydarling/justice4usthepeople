@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="AEDS — African Education Development Society">
+  <defs>
+    <radialGradient id="aedsBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0a0f15"/>
+      <stop offset="100%" stop-color="#000"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="url(#aedsBg)"/>
+  <!-- Radiating rays -->
+  <g stroke="#9bcb3a" stroke-width="3" stroke-linecap="round" fill="none">
+    <line x1="100" y1="22"  x2="100" y2="46"/>
+    <line x1="100" y1="154" x2="100" y2="178"/>
+    <line x1="22"  y1="100" x2="46"  y2="100"/>
+    <line x1="154" y1="100" x2="178" y2="100"/>
+    <line x1="44"  y1="44"  x2="62"  y2="62"/>
+    <line x1="138" y1="138" x2="156" y2="156"/>
+    <line x1="44"  y1="156" x2="62"  y2="138"/>
+    <line x1="138" y1="62"  x2="156" y2="44"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(22 100 100)"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(-22 100 100)"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(67 100 100)"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(-67 100 100)"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(112 100 100)"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(-112 100 100)"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(157 100 100)"/>
+    <line x1="100" y1="34"  x2="100" y2="48"  transform="rotate(-157 100 100)"/>
+  </g>
+  <!-- Africa silhouette -->
+  <path d="M 96 60
+           C 110 60 122 66 124 80
+           C 126 92 122 100 118 106
+           C 116 116 122 124 122 134
+           C 122 146 110 152 100 150
+           C 92 148 86 142 84 132
+           C 80 122 74 116 76 104
+           C 78 96 84 88 86 80
+           C 86 70 88 62 96 60 Z"
+        fill="#9bcb3a"/>
+  <!-- AEDS letters to the right -->
+  <g font-family="Inter, Arial, sans-serif" font-weight="700" fill="#9bcb3a" font-size="22">
+    <text x="148" y="80">A</text>
+    <text x="148" y="104">E</text>
+    <text x="148" y="128">D</text>
+    <text x="148" y="152">S</text>
+  </g>
+</svg>

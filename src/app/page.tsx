@@ -4,8 +4,11 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { ProgramCard, Arrow } from "@/components/ProgramCard";
 import { programs } from "@/lib/programs";
 import { site } from "@/lib/site";
+import { sortEvents, formatDate, formatTime, icsHref } from "@/lib/events";
 
 export default function HomePage() {
+  const { upcoming } = sortEvents();
+  const nextEvent = upcoming[0];
   return (
     <>
       {/* Hero ----------------------------------------------------------- */}
@@ -68,6 +71,42 @@ export default function HomePage() {
           .
         </p>
       </section>
+
+      {/* Upcoming event ------------------------------------------------- */}
+      {nextEvent && (
+        <section className="border-y border-ink/10 bg-ember-50">
+          <div className="container-wide grid items-center gap-8 py-10 md:grid-cols-12 md:py-12">
+            <div className="md:col-span-2">
+              <p className="font-serif text-5xl leading-none text-indigo-900">
+                {new Date(nextEvent.start).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  timeZone: "America/Chicago"
+                })}
+              </p>
+              <p className="mt-1 font-serif text-lg text-ember-700">
+                {new Date(nextEvent.start).toLocaleDateString("en-US", {
+                  month: "short",
+                  timeZone: "America/Chicago"
+                })}
+              </p>
+            </div>
+            <div className="md:col-span-7">
+              <p className="eyebrow">Next in the streets</p>
+              <h3 className="mt-1 font-serif text-2xl">{nextEvent.title}</h3>
+              <p className="mt-1 text-sm text-ink-soft">
+                {formatDate(nextEvent)} · {formatTime(nextEvent)} ·{" "}
+                {nextEvent.location.name}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 md:col-span-3 md:justify-end">
+              <Link href="/events" className="btn-ghost">All events</Link>
+              <a href={icsHref(nextEvent)} download={`${nextEvent.slug}.ics`} className="btn-primary">
+                Add to calendar <Arrow />
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Where to get help (map preview) -------------------------------- */}
       <section className="bg-indigo-900 py-20 text-bone-50 md:py-28">
@@ -279,7 +318,7 @@ function HeroEmblem() {
       <div className="absolute inset-0 rounded-full bg-indigo-900" />
       <div className="absolute inset-3 rounded-full ring-1 ring-bone-50/20" />
       <div className="absolute inset-0 grid place-items-center">
-        <BrandMark variant="light" className="h-2/3 w-2/3" />
+        <BrandMark className="h-2/3 w-2/3" />
       </div>
       <RadialText
         text="JUSTICE · 4 · US · THE · PEOPLE · STAND · IN · SOLIDARITY · WITH · MINNESOTA · "

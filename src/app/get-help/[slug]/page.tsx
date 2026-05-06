@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { programs } from "@/lib/programs";
 import { rentalForm, foodForm, legalForm } from "@/lib/program-forms";
 import { EmbeddedForm, FormConnectionNote } from "@/components/Form";
-import { formspree } from "@/lib/site";
 import { Arrow } from "@/components/ProgramCard";
 
 type Params = Promise<{ slug: string }>;
@@ -27,7 +26,7 @@ export default async function ProgramPage({ params }: { params: Params }) {
   const p = programs.find((x) => x.slug === slug);
   if (!p) return notFound();
 
-  const { fields, endpoint, envVar } = pickFormFor(p.slug);
+  const { fields } = pickFormFor(p.slug);
 
   return (
     <>
@@ -51,10 +50,10 @@ export default async function ProgramPage({ params }: { params: Params }) {
               Share only what you're comfortable sharing. Everything you send
               is read by one of us — not a queue.
             </p>
-            <FormConnectionNote endpoint={endpoint} envVar={envVar} />
+            <FormConnectionNote />
             <div className="mt-6">
               <EmbeddedForm
-                endpoint={endpoint}
+                formId={p.slug}
                 subject={`[${p.shortName}] new application`}
                 hiddenFields={{ program: p.shortName }}
                 fields={fields}
@@ -101,12 +100,12 @@ export default async function ProgramPage({ params }: { params: Params }) {
 function pickFormFor(slug: string) {
   switch (slug) {
     case "rental-utility":
-      return { fields: rentalForm, endpoint: formspree.rental, envVar: "NEXT_PUBLIC_FORMSPREE_RENTAL" };
+      return { fields: rentalForm };
     case "food":
-      return { fields: foodForm, endpoint: formspree.food, envVar: "NEXT_PUBLIC_FORMSPREE_FOOD" };
+      return { fields: foodForm };
     case "legal":
-      return { fields: legalForm, endpoint: formspree.legal, envVar: "NEXT_PUBLIC_FORMSPREE_LEGAL" };
+      return { fields: legalForm };
     default:
-      return { fields: rentalForm, endpoint: formspree.general, envVar: "NEXT_PUBLIC_FORMSPREE_GENERAL" };
+      return { fields: rentalForm };
   }
 }

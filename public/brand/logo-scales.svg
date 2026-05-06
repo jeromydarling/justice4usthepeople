@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Justice 4 Us The People — scales of the world and the flag">
+  <title>Justice 4 Us The People — scales</title>
+  <defs>
+    <radialGradient id="globe" cx="40%" cy="38%" r="65%">
+      <stop offset="0%" stop-color="#3a6cb6"/>
+      <stop offset="60%" stop-color="#1d3f7c"/>
+      <stop offset="100%" stop-color="#0f2349"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e7b257"/>
+      <stop offset="55%" stop-color="#cf952f"/>
+      <stop offset="100%" stop-color="#9d6014"/>
+    </linearGradient>
+    <linearGradient id="navy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22305a"/>
+      <stop offset="100%" stop-color="#0f1a3a"/>
+    </linearGradient>
+    <clipPath id="globe-clip"><circle cx="100" cy="155" r="36"/></clipPath>
+    <clipPath id="flag-clip"><circle cx="220" cy="155" r="36"/></clipPath>
+    <path id="curveBottom" d="M 30 240 A 130 110 0 0 0 290 240"/>
+  </defs>
+
+  <!-- Cream paper background -->
+  <rect width="320" height="320" fill="#f5f0e3"/>
+
+  <!-- Vertical pillar with gold knobs -->
+  <rect x="156" y="76" width="8" height="172" fill="url(#navy)"/>
+  <!-- Gold center knob -->
+  <circle cx="160" cy="106" r="9" fill="url(#gold)"/>
+  <!-- Gold mid knob -->
+  <circle cx="160" cy="170" r="8" fill="url(#gold)"/>
+  <!-- Gold base knob -->
+  <circle cx="160" cy="248" r="9" fill="url(#gold)"/>
+  <!-- Gold finial spire -->
+  <path d="M 160 56 L 168 76 L 160 80 L 152 76 Z" fill="url(#gold)"/>
+
+  <!-- Horizontal beam -->
+  <path d="M 70 102 L 250 102 L 254 110 L 66 110 Z" fill="url(#navy)"/>
+
+  <!-- Beam endpoint loops -->
+  <circle cx="70" cy="106" r="7" fill="none" stroke="url(#navy)" stroke-width="3"/>
+  <circle cx="250" cy="106" r="7" fill="none" stroke="url(#navy)" stroke-width="3"/>
+
+  <!-- Left chains -->
+  <path d="M 70 113 L 80 145 L 100 158 M 70 113 L 60 145 L 100 158" fill="none" stroke="url(#navy)" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Right chains -->
+  <path d="M 250 113 L 240 145 L 220 158 M 250 113 L 260 145 L 220 158" fill="none" stroke="url(#navy)" stroke-width="3" stroke-linejoin="round"/>
+
+  <!-- Left pan (gold) -->
+  <path d="M 60 162 L 140 162 L 124 188 L 76 188 Z" fill="url(#gold)"/>
+  <!-- Right pan (gold) -->
+  <path d="M 180 162 L 260 162 L 244 188 L 196 188 Z" fill="url(#gold)"/>
+
+  <!-- Globe sphere on left pan -->
+  <circle cx="100" cy="155" r="36" fill="url(#globe)"/>
+  <g clip-path="url(#globe-clip)" fill="url(#gold)" opacity="0.95">
+    <!-- Africa-ish continent -->
+    <path d="M 96 132 C 110 130 122 138 122 154 C 124 168 116 184 102 188 C 96 188 88 184 84 178 C 80 172 78 162 82 152 C 84 144 88 138 96 132 Z"/>
+    <!-- Europe smudge -->
+    <path d="M 98 130 C 108 128 116 132 118 138 C 116 142 108 144 100 142 Z"/>
+    <!-- Americas hint on left edge -->
+    <path d="M 70 142 C 78 138 84 144 84 156 C 84 168 78 178 74 180 C 70 178 66 168 68 156 C 68 150 68 146 70 142 Z"/>
+  </g>
+  <!-- Globe meridian highlight -->
+  <ellipse cx="100" cy="155" rx="36" ry="14" fill="none" stroke="#fbf8f2" stroke-opacity="0.18" stroke-width="0.8"/>
+
+  <!-- Flag sphere on right pan -->
+  <circle cx="220" cy="155" r="36" fill="#fbf8f2"/>
+  <g clip-path="url(#flag-clip)">
+    <!-- Stripes -->
+    <g fill="#b3132d">
+      <rect x="184" y="119" width="72" height="6"/>
+      <rect x="184" y="131" width="72" height="6"/>
+      <rect x="184" y="143" width="72" height="6"/>
+      <rect x="184" y="155" width="72" height="6"/>
+      <rect x="184" y="167" width="72" height="6"/>
+      <rect x="184" y="179" width="72" height="6"/>
+    </g>
+    <!-- Canton -->
+    <rect x="184" y="119" width="34" height="32" fill="#1d3f7c"/>
+    <!-- Stars (suggested, simplified) -->
+    <g fill="#fbf8f2">
+      <circle cx="190" cy="125" r="1.4"/><circle cx="198" cy="125" r="1.4"/><circle cx="206" cy="125" r="1.4"/><circle cx="214" cy="125" r="1.4"/>
+      <circle cx="194" cy="131" r="1.4"/><circle cx="202" cy="131" r="1.4"/><circle cx="210" cy="131" r="1.4"/>
+      <circle cx="190" cy="137" r="1.4"/><circle cx="198" cy="137" r="1.4"/><circle cx="206" cy="137" r="1.4"/><circle cx="214" cy="137" r="1.4"/>
+      <circle cx="194" cy="143" r="1.4"/><circle cx="202" cy="143" r="1.4"/><circle cx="210" cy="143" r="1.4"/>
+    </g>
+  </g>
+  <!-- Flag sphere shading -->
+  <circle cx="220" cy="155" r="36" fill="none" stroke="#0a0f15" stroke-width="0.6" opacity="0.6"/>
+
+  <!-- Base platform -->
+  <rect x="120" y="262" width="80" height="14" rx="2" fill="url(#navy)"/>
+  <rect x="110" y="276" width="100" height="8" rx="2" fill="url(#gold)"/>
+
+  <!-- Curved wordmark -->
+  <text fill="#1d3f7c" font-family="'Fraunces', Georgia, serif" font-weight="700" font-size="22" letter-spacing="1">
+    <textPath href="#curveBottom" startOffset="50%" text-anchor="middle">
+      Justice 4 Us The People
+    </textPath>
+  </text>
+</svg>

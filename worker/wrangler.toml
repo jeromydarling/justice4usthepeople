@@ -1,0 +1,22 @@
+name = "j4utp-forms"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+
+# Public envs (set via `wrangler deploy`). Override these for staging.
+[vars]
+# Comma-separated allowed Origin headers. Add http://localhost:3000 during dev.
+ALLOWED_ORIGINS = "https://justice4usthepeople.org,https://jeromydarling.github.io"
+# "owner/repo" — must be a PRIVATE repo since submissions contain PII.
+ISSUES_REPO = "jeromydarling/j4utp-submissions"
+ISSUES_LABEL = "form-submission"
+RATE_LIMIT_PER_MIN = "8"
+
+# GITHUB_TOKEN is set as a Worker secret (not committed):
+#   wrangler secret put GITHUB_TOKEN
+
+# Optional: bind a KV namespace for rate limiting.
+# Create it once with:  wrangler kv namespace create FORMS_RL
+# Then paste the id here:
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"

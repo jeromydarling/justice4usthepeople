@@ -1,31 +1,39 @@
 import Link from "next/link";
+import Image from "next/image";
 import { site } from "@/lib/site";
 
-// Brand mark — inspired by the existing loon-with-north-star logo.
-// The loon (Minnesota's state bird) represents the rooted, watchful guardian
-// of the community; the north star is the steady light of justice and
-// belonging. Drop a real /public/brand/logo-loon.svg in to override the
-// inline SVG below.
+export type LogoMark = "loon" | "scales";
+
+// Brand mark — defaults to the loon-and-north-star mark from the existing
+// site footer (Minnesota's bird, rising as guardian; the steady light of
+// justice). Pass `mark="scales"` to use the original Justice 4 Us The People
+// scales-of-the-world wordmark instead.
+//
+// Drop replacement files at /public/brand/logo.svg or /public/brand/logo-scales.svg
+// to override either mark.
 export function Logo({
   variant = "dark",
+  mark = "loon",
   className = "",
   showWordmark = true
 }: {
   variant?: "dark" | "light";
+  mark?: LogoMark;
   className?: string;
   showWordmark?: boolean;
 }) {
   const isLight = variant === "light";
   const fg = isLight ? "text-bone-50" : "text-indigo-900";
   const subFg = isLight ? "text-ember-200" : "text-ember-700";
+  const wm = mark === "scales" && !showWordmark ? false : showWordmark;
   return (
     <Link
       href="/"
       aria-label={site.name}
       className={`group inline-flex items-center gap-3 no-underline ${className}`}
     >
-      <BrandMark variant={variant} className="h-10 w-10 shrink-0" />
-      {showWordmark && (
+      <BrandMark mark={mark} className={mark === "scales" ? "h-12 w-12 shrink-0" : "h-10 w-10 shrink-0"} />
+      {wm && (
         <span className="flex flex-col leading-none">
           <span className={`font-serif text-lg tracking-tight ${fg}`}>
             Justice <span className="text-ember-500">4</span> Us The People
@@ -41,50 +49,27 @@ export function Logo({
   );
 }
 
-// Stylized loon-and-star mark. Two-color, prints clean, scales down to a favicon.
+// Renders the actual SVG file. Static export friendly.
 export function BrandMark({
-  variant = "dark",
+  mark = "loon",
   className = ""
 }: {
-  variant?: "dark" | "light";
+  mark?: LogoMark;
   className?: string;
 }) {
-  const isLight = variant === "light";
-  const ring = isLight ? "#fbf8f2" : "#1a2540";
-  const sky = isLight ? "#22304d" : "#bcc3d4";
-  const body = isLight ? "#fbf8f2" : "#15171c";
-  const star = "#dc972f";
+  const src = mark === "scales" ? "/brand/logo-scales.svg" : "/brand/logo.svg";
+  const alt =
+    mark === "scales"
+      ? "Justice 4 Us The People — scales"
+      : "Justice 4 Us The People — loon rising with north star";
   return (
-    <svg
-      viewBox="0 0 64 64"
-      role="img"
-      aria-label="Loon rising with north star"
+    <Image
+      src={src}
+      alt={alt}
+      width={mark === "scales" ? 120 : 100}
+      height={mark === "scales" ? 120 : 100}
       className={className}
-    >
-      <circle cx="32" cy="32" r="30" fill={sky} />
-      <circle cx="32" cy="32" r="30" fill="none" stroke={ring} strokeWidth="2.5" />
-      {/* Loon: stylized silhouette of a rising water bird with wings up. */}
-      <path
-        d={`
-          M32 49
-          C 22 49 18 43 17 38
-          C 21 41 25 41 28 39
-          C 24 33 22 26 22 19
-          C 26 24 30 28 32 31
-          C 34 28 38 24 42 19
-          C 42 26 40 33 36 39
-          C 39 41 43 41 47 38
-          C 46 43 42 49 32 49 Z
-        `}
-        fill={body}
-      />
-      {/* Eye accent */}
-      <circle cx="32" cy="36" r="0.9" fill={star} />
-      {/* North star above */}
-      <path
-        d="M32 6 L33.4 11 L38 12 L33.4 13 L32 18 L30.6 13 L26 12 L30.6 11 Z"
-        fill={star}
-      />
-    </svg>
+      priority
+    />
   );
 }

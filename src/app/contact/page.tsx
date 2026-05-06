@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { EmbeddedForm, FormConnectionNote } from "@/components/Form";
 import { contactForm } from "@/lib/program-forms";
-import { formspree, site } from "@/lib/site";
+import { site } from "@/lib/site";
 
 export default function ContactPage() {
   return (
@@ -64,9 +64,9 @@ function ContactPageInner() {
             </div>
           </aside>
           <div className="md:col-span-7">
-            <FormConnectionNote endpoint={formspree.general} envVar="NEXT_PUBLIC_FORMSPREE_GENERAL" />
+            <FormConnectionNote />
             <EmbeddedForm
-              endpoint={formspree.general}
+              formId="contact"
               subject={`${subject} new message`}
               fields={contactForm}
               submitLabel="Send message"

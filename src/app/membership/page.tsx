@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 import { EmbeddedForm, FormConnectionNote } from "@/components/Form";
 import { membershipForm } from "@/lib/program-forms";
-import { formspree, stripeLinks } from "@/lib/site";
+import { stripeLinks } from "@/lib/site";
 import { Arrow } from "@/components/ProgramCard";
 
 export const metadata: Metadata = {
@@ -68,9 +68,9 @@ export default function MembershipPage() {
             </p>
           </div>
           <div className="md:col-span-7">
-            <FormConnectionNote endpoint={formspree.membership} envVar="NEXT_PUBLIC_FORMSPREE_MEMBERSHIP" />
+            <FormConnectionNote />
             <EmbeddedForm
-              endpoint={formspree.membership}
+              formId="membership"
               subject="[Membership] new member"
               fields={membershipForm}
               submitLabel="Become a member"

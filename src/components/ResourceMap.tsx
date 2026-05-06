@@ -9,6 +9,7 @@ const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 export function ResourceMap() {
   const mapEl = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
   const [active, setActive] = useState<Set<ResourceCategory>>(
     new Set(Object.keys(categories) as ResourceCategory[])
   );
@@ -26,10 +27,37 @@ export function ResourceMap() {
     const map = new mapboxgl.Map({
       container: mapEl.current,
       style: "mapbox://styles/mapbox/light-v11",
-      center: [-93.2, 44.96], // Twin Cities midpoint
-      zoom: 10.6
+      center: [-93.2, 44.96],
+      zoom: 10.4,
+      cooperativeGestures: true
     });
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: false,
+        showUserHeading: true,
+        showAccuracyCircle: true
+      }),
+      "top-right"
+    );
+    map.addControl(new mapboxgl.FullscreenControl(), "top-right");
+    map.addControl(new mapboxgl.ScaleControl({ unit: "imperial" }), "bottom-left");
+
+    // Subtle brand tinting once style is loaded.
+    map.on("load", () => {
+      try {
+        if (map.getLayer("water")) {
+          map.setPaintProperty("water", "fill-color", "#dbe4ee");
+        }
+        if (map.getLayer("land")) {
+          map.setPaintProperty("land", "background-color", "#fbf8f2");
+        }
+      } catch {
+        /* style version differences — non-fatal */
+      }
+    });
+
     mapRef.current = map;
     return () => {
       map.remove();
@@ -37,28 +65,52 @@ export function ResourceMap() {
     };
   }, []);
 
-  // Render markers when filter changes
+  // Render markers + fit bounds when filter changes
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    const markers: mapboxgl.Marker[] = [];
+    // Clear previous markers
+    for (const m of markersRef.current) m.remove();
+    markersRef.current = [];
+
+    if (visible.length === 0) return;
+
+    const bounds = new mapboxgl.LngLatBounds();
     for (const r of visible) {
       const el = document.createElement("button");
       el.type = "button";
       el.setAttribute("aria-label", r.name);
+      el.className = "j4-marker";
       el.style.cssText = `
-        width: 22px; height: 22px; border-radius: 9999px;
-        background: ${categories[r.category].color}; border: 2px solid #fbf8f2;
-        box-shadow: 0 2px 8px rgba(20,23,28,.25); cursor: pointer;
+        position: relative;
+        width: 26px; height: 26px; border-radius: 9999px;
+        background: ${categories[r.category].color};
+        border: 3px solid #fbf8f2;
+        box-shadow: 0 6px 18px -4px rgba(20,23,28,.45);
+        cursor: pointer; padding: 0;
+        transition: transform .15s ease;
       `;
+      el.addEventListener("mouseenter", () => (el.style.transform = "scale(1.18)"));
+      el.addEventListener("mouseleave", () => (el.style.transform = "scale(1)"));
       el.addEventListener("click", (e) => {
         e.stopPropagation();
         setSelected(r);
+        map.flyTo({ center: r.coords, zoom: Math.max(map.getZoom(), 12.2), speed: 0.8 });
       });
-      const marker = new mapboxgl.Marker({ element: el }).setLngLat(r.coords).addTo(map);
-      markers.push(marker);
+
+      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
+        .setLngLat(r.coords)
+        .addTo(map);
+      markersRef.current.push(marker);
+      bounds.extend(r.coords);
     }
-    return () => markers.forEach((m) => m.remove());
+
+    // Fit bounds when filters change (but not on every selection).
+    if (visible.length === 1) {
+      map.flyTo({ center: visible[0].coords, zoom: 13, speed: 0.7 });
+    } else {
+      map.fitBounds(bounds, { padding: 60, maxZoom: 12.4, duration: 700 });
+    }
   }, [visible]);
 
   if (!TOKEN) {
@@ -70,7 +122,9 @@ export function ResourceMap() {
           Set <code>NEXT_PUBLIC_MAPBOX_TOKEN</code> in your build environment.
           Until then, the resources below are fully usable.
         </p>
-        <ResourceList resources={visible} active={active} setActive={setActive} />
+        <div className="mt-6">
+          <ResourceList resources={visible} active={active} setActive={setActive} />
+        </div>
       </div>
     );
   }
@@ -83,14 +137,18 @@ export function ResourceMap() {
           resources={visible}
           active={active}
           setActive={setActive}
+          selectedId={selected?.id}
           onPick={(r) => {
             setSelected(r);
-            mapRef.current?.flyTo({ center: r.coords, zoom: 13.4 });
+            mapRef.current?.flyTo({ center: r.coords, zoom: 13.2, speed: 0.8 });
           }}
         />
       </aside>
       <div className="relative md:col-span-8">
-        <div ref={mapEl} className="h-[480px] w-full overflow-hidden rounded-2xl ring-1 ring-ink/10 md:h-[640px]" />
+        <div
+          ref={mapEl}
+          className="h-[480px] w-full overflow-hidden rounded-2xl ring-1 ring-ink/10 md:h-[640px]"
+        />
         {selected && (
           <div className="absolute bottom-4 left-4 right-4 card p-5 md:max-w-md">
             <button
@@ -155,11 +213,13 @@ function Filters({
 
 function ResourceList({
   resources,
+  selectedId,
   onPick
 }: {
   resources: Resource[];
   active: Set<ResourceCategory>;
   setActive: (s: Set<ResourceCategory>) => void;
+  selectedId?: string;
   onPick?: (r: Resource) => void;
 }) {
   return (
@@ -169,7 +229,10 @@ function ResourceList({
           <button
             type="button"
             onClick={() => onPick?.(r)}
-            className="block w-full px-4 py-3 text-left hover:bg-ink/5"
+            className={
+              "block w-full px-4 py-3 text-left transition " +
+              (selectedId === r.id ? "bg-ember-100/60" : "hover:bg-ink/5")
+            }
           >
             <div className="flex items-center gap-2 text-xs">
               <span
@@ -184,13 +247,17 @@ function ResourceList({
         </li>
       ))}
       {resources.length === 0 && (
-        <li className="px-4 py-6 text-sm text-ink-muted">No resources match the current filter.</li>
+        <li className="px-4 py-6 text-sm text-ink-muted">
+          No resources match the current filter.
+        </li>
       )}
     </ul>
   );
 }
 
 function ResourceMeta({ r }: { r: Resource }) {
+  const [lng, lat] = r.coords;
+  const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
   return (
     <dl className="mt-3 space-y-1 text-sm">
       {r.address && (
@@ -214,6 +281,11 @@ function ResourceMeta({ r }: { r: Resource }) {
           </a>
         </Row>
       )}
+      <Row k="Go">
+        <a className="btn-link" href={directions} target="_blank" rel="noreferrer">
+          Directions
+        </a>
+      </Row>
     </dl>
   );
 }

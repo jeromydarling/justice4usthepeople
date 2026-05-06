@@ -31,7 +31,9 @@ export function MapPreview({ fallback }: { fallback: React.ReactNode }) {
     map.scrollZoom.disable();
 
     map.on("load", () => {
-      // Subtle indigo wash to match the section's bg-indigo-900 surround.
+      // Aspect-ratio parents can race the canvas init and produce a blank
+      // tile. Force a resize once the style is up.
+      map.resize();
       try {
         if (map.getLayer("water")) {
           map.setPaintProperty("water", "fill-color", "#1f2a55");
@@ -53,8 +55,13 @@ export function MapPreview({ fallback }: { fallback: React.ReactNode }) {
       }
     });
 
+    // Guard against the parent resizing after mount (responsive layouts).
+    const ro = new ResizeObserver(() => map.resize());
+    ro.observe(el.current);
+
     mapRef.current = map;
     return () => {
+      ro.disconnect();
       map.remove();
       mapRef.current = null;
     };
@@ -64,16 +71,16 @@ export function MapPreview({ fallback }: { fallback: React.ReactNode }) {
 
   return (
     <div className="relative h-full w-full">
-      <div ref={el} className="absolute inset-0" />
-      <Link
-        href="/get-help"
-        aria-label="Open the full resource map"
-        className="absolute inset-0 z-10 flex items-end justify-end p-4 md:p-5"
-      >
-        <span className="rounded-full bg-bone-50/95 px-4 py-2 text-xs font-medium text-ink shadow-md ring-1 ring-ink/10 backdrop-blur transition group-hover:bg-bone-50">
+      <div ref={el} className="h-full w-full" />
+      <div className="pointer-events-none absolute inset-0 flex items-end justify-end p-4 md:p-5">
+        <Link
+          href="/get-help"
+          aria-label="Open the full resource map"
+          className="pointer-events-auto rounded-full bg-bone-50/95 px-4 py-2 text-xs font-medium text-ink shadow-md ring-1 ring-ink/10 backdrop-blur transition hover:bg-bone-50"
+        >
           Open the map →
-        </span>
-      </Link>
+        </Link>
+      </div>
     </div>
   );
 }

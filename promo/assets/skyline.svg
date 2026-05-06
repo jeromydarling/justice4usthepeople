@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="xMidYMid slice">
+  <!-- Hand-drawn Minneapolis skyline. Stylized line-art with the brand
+       palette. Recognizable silhouettes (left to right):
+         IDS Center, Foshay Tower, Capella Tower, Wells Fargo Center,
+         Hennepin County Government Center, Stone Arch Bridge, river. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#1f2a55"/>
+      <stop offset="55%"  stop-color="#3a4d77"/>
+      <stop offset="80%"  stop-color="#a8512a"/>
+      <stop offset="100%" stop-color="#dc972f"/>
+    </linearGradient>
+    <linearGradient id="silhouette" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#14171c"/>
+      <stop offset="100%" stop-color="#22304d"/>
+    </linearGradient>
+    <linearGradient id="river" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#dbe4ee" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fbf8f2" stop-opacity="0.05"/>
+    </linearGradient>
+    <pattern id="hatch" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="4" stroke="#fbf8f2" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+
+  <!-- Distant clouds -->
+  <g fill="#fbf8f2" fill-opacity="0.06">
+    <ellipse cx="280" cy="180" rx="220" ry="22"/>
+    <ellipse cx="900" cy="120" rx="280" ry="18"/>
+    <ellipse cx="1500" cy="200" rx="240" ry="20"/>
+  </g>
+
+  <!-- North Star (echoing the loon mark) -->
+  <g transform="translate(1660,160)" fill="#fbf8f2">
+    <polygon points="0,-22 5,-6 22,0 5,6 0,22 -5,6 -22,0 -5,-6"/>
+    <circle r="3" fill="#dc972f"/>
+  </g>
+
+  <!-- Far skyline ridge (lighter, distant) -->
+  <path
+    d="M0,720
+       L80,720 L100,710 L140,710 L160,690 L220,690 L235,700 L290,700 L310,680 L360,680 L380,700
+       L460,700 L480,675 L540,675 L560,700 L640,700 L680,665 L720,665 L740,705 L840,705 L870,690 L930,690 L955,710
+       L1080,710 L1100,690 L1180,690 L1210,720 L1300,720 L1330,700 L1420,700 L1450,720 L1560,720 L1600,705 L1700,705 L1740,720 L1920,720 L1920,1080 L0,1080 Z"
+    fill="#22304d" opacity="0.55"/>
+
+  <!-- Main downtown silhouette -->
+  <g fill="url(#silhouette)">
+    <!-- Hennepin County Government Center -->
+    <rect x="120" y="540" width="120" height="280"/>
+    <!-- Wells Fargo Center -->
+    <rect x="260" y="430" width="140" height="390"/>
+    <polygon points="260,430 330,360 400,430"/>
+    <!-- Capella Tower -->
+    <rect x="440" y="370" width="160" height="450"/>
+    <!-- Capella crown -->
+    <rect x="450" y="320" width="140" height="55" rx="10"/>
+    <circle cx="520" cy="305" r="14"/>
+    <!-- IDS Center (tallest, center-left) -->
+    <rect x="640" y="280" width="180" height="540"/>
+    <polygon points="640,280 730,210 820,280"/>
+    <!-- Antenna on IDS -->
+    <line x1="730" y1="210" x2="730" y2="160" stroke="#14171c" stroke-width="6"/>
+    <circle cx="730" cy="155" r="6"/>
+    <!-- Foshay Tower (the obelisk) -->
+    <rect x="860" y="430" width="80" height="390"/>
+    <polygon points="855,430 900,370 945,430"/>
+    <rect x="893" y="345" width="14" height="30"/>
+    <!-- Mid-rise -->
+    <rect x="970" y="510" width="110" height="310"/>
+    <rect x="1100" y="470" width="130" height="350"/>
+    <polygon points="1100,470 1165,420 1230,470"/>
+    <!-- Right-side cluster -->
+    <rect x="1260" y="540" width="100" height="280"/>
+    <rect x="1380" y="500" width="120" height="320"/>
+    <rect x="1520" y="560" width="90" height="260"/>
+    <rect x="1630" y="600" width="80" height="220"/>
+  </g>
+
+  <!-- Window grids (hatching for warmth) -->
+  <g fill="url(#hatch)">
+    <rect x="120" y="540" width="120" height="280"/>
+    <rect x="260" y="430" width="140" height="390"/>
+    <rect x="440" y="370" width="160" height="450"/>
+    <rect x="640" y="280" width="180" height="540"/>
+    <rect x="860" y="430" width="80" height="390"/>
+    <rect x="970" y="510" width="110" height="310"/>
+    <rect x="1100" y="470" width="130" height="350"/>
+    <rect x="1260" y="540" width="100" height="280"/>
+    <rect x="1380" y="500" width="120" height="320"/>
+    <rect x="1520" y="560" width="90" height="260"/>
+    <rect x="1630" y="600" width="80" height="220"/>
+  </g>
+
+  <!-- Warm window lights (a few scattered glowing windows) -->
+  <g fill="#dc972f" fill-opacity="0.85">
+    <rect x="700" y="380" width="6" height="8"/>
+    <rect x="710" y="380" width="6" height="8"/>
+    <rect x="730" y="395" width="6" height="8"/>
+    <rect x="745" y="395" width="6" height="8"/>
+    <rect x="760" y="395" width="6" height="8"/>
+    <rect x="700" y="420" width="6" height="8"/>
+    <rect x="745" y="430" width="6" height="8"/>
+    <rect x="475" y="500" width="6" height="8"/>
+    <rect x="490" y="500" width="6" height="8"/>
+    <rect x="510" y="510" width="6" height="8"/>
+    <rect x="295" y="530" width="6" height="8"/>
+    <rect x="310" y="530" width="6" height="8"/>
+    <rect x="335" y="550" width="6" height="8"/>
+    <rect x="1130" y="550" width="6" height="8"/>
+    <rect x="1145" y="550" width="6" height="8"/>
+    <rect x="1170" y="565" width="6" height="8"/>
+    <rect x="1410" y="580" width="6" height="8"/>
+    <rect x="1425" y="580" width="6" height="8"/>
+    <rect x="880" y="490" width="6" height="8"/>
+    <rect x="895" y="490" width="6" height="8"/>
+    <rect x="910" y="490" width="6" height="8"/>
+  </g>
+
+  <!-- Mississippi river -->
+  <path
+    d="M0,820 Q480,810 960,825 T1920,815 L1920,1080 L0,1080 Z"
+    fill="url(#river)"/>
+  <path
+    d="M0,820 Q480,810 960,825 T1920,815"
+    fill="none" stroke="#fbf8f2" stroke-opacity="0.18" stroke-width="2"/>
+
+  <!-- Stone Arch Bridge — simplified arches in the foreground -->
+  <g stroke="#14171c" stroke-width="3" fill="none" opacity="0.85">
+    <path d="M180,860 Q230,830 280,860" />
+    <path d="M280,860 Q330,830 380,860" />
+    <path d="M380,860 Q430,830 480,860" />
+    <path d="M480,860 Q530,830 580,860" />
+    <path d="M580,860 Q630,830 680,860" />
+    <path d="M680,860 Q730,830 780,860" />
+    <path d="M780,860 Q830,830 880,860" />
+    <line x1="160" y1="860" x2="900" y2="860" stroke-width="4"/>
+  </g>
+
+  <!-- River reflection of skyline (subtle shimmer) -->
+  <g fill="#14171c" opacity="0.18" transform="translate(0,1640) scale(1,-1)">
+    <rect x="640" y="280" width="180" height="540"/>
+    <rect x="440" y="370" width="160" height="450"/>
+    <rect x="860" y="430" width="80" height="390"/>
+  </g>
+
+  <!-- Faint horizon glow -->
+  <rect x="0" y="700" width="1920" height="40" fill="#dc972f" fill-opacity="0.08"/>
+
+  <!-- Optional brand caption (hidden in video; used by poster only) -->
+  <g id="brand-caption" opacity="0">
+    <text x="960" y="500" text-anchor="middle"
+          font-family="Georgia, serif" font-size="64" fill="#fbf8f2" font-weight="700">
+      Justice 4 Us The People
+    </text>
+    <text x="960" y="560" text-anchor="middle"
+          font-family="-apple-system, sans-serif" font-size="22"
+          letter-spacing="6" fill="#dc972f" font-weight="600">
+      STAND IN SOLIDARITY · MINNESOTA
+    </text>
+  </g>
+</svg>

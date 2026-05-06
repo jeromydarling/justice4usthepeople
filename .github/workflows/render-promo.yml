@@ -2,14 +2,13 @@ name: Render promo video
 
 # Generates the 60s promo video by:
 #   1. calling the ElevenLabs Music API for the backing track
-#   2. rendering promo/composition.html to MP4 via hyperframes
+#   2. rendering the hyperframes composition at /promo/index.html to MP4
 #   3. opening a pull request with the rendered file at public/promo/promo.mp4
 #
-# Manual-only — there's no reason to render every push. Re-run after editing
-# promo/composition.html or promo/script.md, or to refresh the music.
+# Manual-only — re-run after editing promo/index.html or the script.
 #
 # Required GitHub secrets:
-#   ELEVENLABS_API_KEY — your ElevenLabs API key (Music + TTS access)
+#   ELEVENLABS_API_KEY — ElevenLabs API key (Music + TTS access)
 
 on:
   workflow_dispatch:
@@ -34,9 +33,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # hyperframes (>=0.5) requires Node 22.
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install repo dependencies
@@ -46,6 +46,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
+
+      - name: Stage assets into promo/assets/
+        # Public assets are copied into the project dir so hyperframes can
+        # resolve relative paths inside index.html.
+        run: |
+          mkdir -p promo/assets
+          cp public/promo/skyline.svg promo/assets/
+          cp public/brand/logo-loon.png promo/assets/
+          ls -lh promo/assets/
 
       - name: Generate music from ElevenLabs
         if: ${{ inputs.regen_music }}
@@ -60,15 +69,24 @@ jobs:
           npm run -s promo:music
 
       - name: Render with hyperframes
+        # No --input flag — hyperframes uses /promo as the project dir,
+        # finds index.html + meta.json, and writes the MP4 under ./out/.
         working-directory: ./promo
         run: |
-          npx -y hyperframes render --input composition.html --output ./out/promo.mp4
-          ls -lh out/
+          npx -y hyperframes render
+          echo "--- after render ---"
+          find . -maxdepth 3 -type f -name "*.mp4" -print
 
       - name: Move rendered MP4 to /public/promo/
         run: |
           mkdir -p public/promo
-          mv promo/out/promo.mp4 public/promo/promo.mp4
+          # Find the first MP4 produced by hyperframes (filename varies by version).
+          MP4=$(find promo -maxdepth 3 -type f -name "*.mp4" | head -n 1)
+          if [ -z "$MP4" ]; then
+            echo "::error::No MP4 produced by hyperframes."
+            exit 1
+          fi
+          mv "$MP4" public/promo/promo.mp4
           ls -lh public/promo/
 
       - name: Open pull request with the rendered video

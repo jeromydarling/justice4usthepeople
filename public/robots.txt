@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://justice4usthepeople.org/sitemap.xml

@@ -1,0 +1,89 @@
+name: Build & deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static site
+        env:
+          # Site
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://justice4usthepeople.org' }}
+          NEXT_PUBLIC_SITE_NAME: ${{ vars.SITE_NAME || 'Justice 4 Us The People' }}
+          # Empty for custom domain (CNAME); set to '/repo-name' for project pages
+          NEXT_PUBLIC_BASE_PATH: ${{ vars.BASE_PATH }}
+
+          # Forms — Formspree endpoints
+          NEXT_PUBLIC_FORMSPREE_GENERAL: ${{ secrets.FORMSPREE_GENERAL }}
+          NEXT_PUBLIC_FORMSPREE_RENTAL: ${{ secrets.FORMSPREE_RENTAL }}
+          NEXT_PUBLIC_FORMSPREE_FOOD: ${{ secrets.FORMSPREE_FOOD }}
+          NEXT_PUBLIC_FORMSPREE_LEGAL: ${{ secrets.FORMSPREE_LEGAL }}
+          NEXT_PUBLIC_FORMSPREE_VOLUNTEER: ${{ secrets.FORMSPREE_VOLUNTEER }}
+          NEXT_PUBLIC_FORMSPREE_MEMBERSHIP: ${{ secrets.FORMSPREE_MEMBERSHIP }}
+
+          # Stripe — Payment Link URLs
+          NEXT_PUBLIC_STRIPE_DONATE_25: ${{ secrets.STRIPE_DONATE_25 }}
+          NEXT_PUBLIC_STRIPE_DONATE_50: ${{ secrets.STRIPE_DONATE_50 }}
+          NEXT_PUBLIC_STRIPE_DONATE_100: ${{ secrets.STRIPE_DONATE_100 }}
+          NEXT_PUBLIC_STRIPE_DONATE_250: ${{ secrets.STRIPE_DONATE_250 }}
+          NEXT_PUBLIC_STRIPE_DONATE_CUSTOM: ${{ secrets.STRIPE_DONATE_CUSTOM }}
+          NEXT_PUBLIC_STRIPE_MEMBERSHIP_MONTHLY: ${{ secrets.STRIPE_MEMBERSHIP_MONTHLY }}
+          NEXT_PUBLIC_STRIPE_MEMBERSHIP_ANNUAL: ${{ secrets.STRIPE_MEMBERSHIP_ANNUAL }}
+          NEXT_PUBLIC_STRIPE_YARDSIGN: ${{ secrets.STRIPE_YARDSIGN }}
+          NEXT_PUBLIC_STRIPE_TSHIRT: ${{ secrets.STRIPE_TSHIRT }}
+          NEXT_PUBLIC_STRIPE_BUTTON_PACK: ${{ secrets.STRIPE_BUTTON_PACK }}
+
+          # Mapbox + RSS
+          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
+          NEXT_PUBLIC_RSS2JSON_API_KEY: ${{ secrets.RSS2JSON_API_KEY }}
+        run: npm run build
+
+      - name: Add GitHub Pages files (.nojekyll, 404 fallback, CNAME)
+        run: |
+          touch ./out/.nojekyll
+          # SPA-style 404 fallback — copies the static 404.html if Next emits one,
+          # otherwise reuses index for client-side routing.
+          if [ ! -f ./out/404.html ] && [ -f ./out/index.html ]; then
+            cp ./out/index.html ./out/404.html
+          fi
+          # Custom domain: drop a CNAME file if SITE_DOMAIN is configured.
+          if [ -n "${{ vars.SITE_DOMAIN }}" ]; then
+            echo "${{ vars.SITE_DOMAIN }}" > ./out/CNAME
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

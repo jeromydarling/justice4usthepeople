@@ -5,13 +5,20 @@ A 60-second promo video built with [HyperFrames](https://github.com/heygen-com/h
 
 ```
 promo/
-  composition.html   ← the entire video, written as standard HTML + CSS
+  index.html         ← the entire video, written as standard HTML + CSS
+                       (hyperframes convention: project root = a folder
+                       containing index.html + meta.json + assets/)
+  meta.json          ← name / duration / fps / resolution
+  assets/
+    skyline.svg      ← Minneapolis skyline backdrop (copied from /public)
+    logo-loon.png    ← brand mark (copied from /public)
   script.md          ← editorial script + voiceover lines
   music.wav          ← (generated) 60s instrumental from ElevenLabs
   voiceover.wav      ← (optional) record + drop here, or generate via ElevenLabs TTS
-  ../public/promo/skyline.svg   ← hand-drawn Minneapolis skyline backdrop
+  out/               ← (generated) hyperframes' default output dir
+  ../public/promo/skyline.svg   ← source-of-truth skyline (also embedded in site)
   ../public/promo/poster.png    ← still poster used in the modal until MP4 lands
-  ../public/promo/promo.mp4     ← (generated) final rendered video
+  ../public/promo/promo.mp4     ← (final) rendered video, served by the site
 ```
 
 ## How it ships
@@ -27,6 +34,8 @@ promo/
 
 ## Run it locally
 
+Requires Node ≥ 22 (hyperframes 0.5+).
+
 ```bash
 # 1. Generate the music (~30 s, costs a few credits)
 ELEVENLABS_API_KEY=sk_... npm run promo:music
@@ -34,11 +43,10 @@ ELEVENLABS_API_KEY=sk_... npm run promo:music
 # 2. (optional) Drop a voiceover.wav into promo/ — your phone is fine.
 
 # 3. Render the video locally
-cd promo
-npx -y hyperframes render
+npm run promo:render
 
 # 4. Move the output into the public folder
-mv out/*.mp4 ../public/promo/promo.mp4
+mv promo/out/*.mp4 public/promo/promo.mp4
 ```
 
 ## Editing the video

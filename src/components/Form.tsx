@@ -81,7 +81,10 @@ export function EmbeddedForm({
       return;
     }
     setState({ status: "submitting" });
-    const data = new FormData(e.currentTarget);
+    // Capture references synchronously — `e.currentTarget` is null after `await`
+    // per the DOM event spec (the synthetic event has finished dispatching).
+    const form = e.currentTarget;
+    const data = new FormData(form);
     try {
       const res = await fetch(endpoint, {
         method: "POST",
@@ -92,8 +95,9 @@ export function EmbeddedForm({
         const json = await res.json().catch(() => ({}));
         throw new Error(json?.error || `Submission failed (${res.status}).`);
       }
+      // The success view replaces the <form> entirely (see render below), so
+      // resetting it is unnecessary. Just flip state.
       setState({ status: "ok" });
-      e.currentTarget.reset();
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Something went wrong.";
       setState({ status: "error", message });

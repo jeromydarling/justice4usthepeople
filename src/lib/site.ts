@@ -27,7 +27,12 @@ export const site = {
   // Single endpoint for all form submissions. Points to our Cloudflare
   // Worker (see /worker). Each form passes a different `_form` field so the
   // Worker can label / route as needed.
-  formEndpoint: process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? ""
+  formEndpoint: process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "",
+  // Promo video — populated once the render-promo workflow has produced the
+  // file. Until then the homepage hero shows a "promo coming" placeholder
+  // instead of a broken video.
+  promoVideoUrl: "/promo/promo.mp4",
+  promoPosterUrl: "/promo/poster.png"
 };
 
 // (formspree config removed — see formEndpoint above)

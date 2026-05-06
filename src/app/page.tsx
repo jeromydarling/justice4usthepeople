@@ -3,6 +3,7 @@ import { BrandMark } from "@/components/Logo";
 import { SectionHeader } from "@/components/SectionHeader";
 import { ProgramCard, Arrow } from "@/components/ProgramCard";
 import { MapPreview } from "@/components/MapPreview";
+import { PromoVideoButton } from "@/components/PromoVideo";
 import { programs } from "@/lib/programs";
 import { site } from "@/lib/site";
 import { sortEvents, formatDate, formatTime, icsHref } from "@/lib/events";
@@ -28,7 +29,12 @@ export default function HomePage() {
               protection — the everyday fabric of a community that refuses to
               let any of its people fall through.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            {/* Promo video CTA — opens a modal player. The MP4 is rendered
+                from /promo/composition.html via the render-promo workflow. */}
+            <div className="mt-6">
+              <PromoVideoButton />
+            </div>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <Link href="/take-action" className="btn-primary">
                 Take action <Arrow />
               </Link>

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { resources, categories, type ResourceCategory, type Resource } from "@/lib/resources";
@@ -180,6 +181,12 @@ export function ResourceMap() {
             <h4 className="mt-1 text-lg">{selected.name}</h4>
             <p className="mt-2 text-sm text-ink-soft">{selected.blurb}</p>
             <ResourceMeta r={selected} />
+            <Link
+              href={`/get-help/resources/${selected.id}`}
+              className="btn-link mt-3 inline-flex text-sm"
+            >
+              Full details →
+            </Link>
           </div>
         )}
       </div>

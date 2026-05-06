@@ -32,6 +32,14 @@ export default function EventsPage() {
           title="Show up. Bring a neighbor."
           lede="Press conferences, marches, vigils, trainings. Every gathering is a moment to be visible for one another. RSVP isn't required, but it helps us plan — and helps a friend you'd bring along."
         />
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link href="/calendar.ics" className="btn-ghost text-sm">
+            Subscribe in your calendar
+          </Link>
+          <span className="self-center text-xs text-ink-muted">
+            Events flow into Google / Apple / Outlook automatically.
+          </span>
+        </div>
       </section>
 
       {upcoming.length > 0 && (

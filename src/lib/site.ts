@@ -47,12 +47,42 @@ export const stripeLinks = {
 };
 
 export type NavItem = { label: string; href: string };
-export const primaryNav: NavItem[] = [
-  { label: "Our Values", href: "/values" },
-  { label: "Events", href: "/events" },
-  { label: "Get Help", href: "/get-help" },
-  { label: "Know Your Rights", href: "/know-your-rights" },
-  { label: "News", href: "/news" },
-  { label: "Take Action", href: "/take-action" },
-  { label: "Store", href: "/store" }
+export type NavGroup = { label: string; href?: string; items: NavItem[] };
+
+// Top-nav groups, mirrored in the footer for consistency. Each group's
+// `href` (optional) is the "all of X" overview page — clicking the group
+// label routes there; hovering / focusing opens the dropdown of items.
+export const primaryNav: NavGroup[] = [
+  {
+    label: "Get help",
+    href: "/get-help",
+    items: [
+      { label: "Resource map", href: "/get-help" },
+      { label: "Know Your Rights", href: "/know-your-rights" },
+      { label: "If a loved one was detained", href: "/find-loved-one" },
+      { label: "Rental & utility relief", href: "/get-help/rental-utility" },
+      { label: "Food relief", href: "/get-help/food" },
+      { label: "Legal navigation", href: "/get-help/legal" }
+    ]
+  },
+  {
+    label: "Take action",
+    href: "/take-action",
+    items: [
+      { label: "Events", href: "/events" },
+      { label: "Volunteer & host", href: "/take-action" },
+      { label: "Court support", href: "/court-support" },
+      { label: "Store", href: "/store" }
+    ]
+  },
+  {
+    label: "About",
+    items: [
+      { label: "Our Values", href: "/values" },
+      { label: "Stories", href: "/stories" },
+      { label: "Coalition partners", href: "/partners" },
+      { label: "News & Updates", href: "/news" },
+      { label: "Contact", href: "/contact" }
+    ]
+  }
 ];

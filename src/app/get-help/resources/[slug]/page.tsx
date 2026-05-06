@@ -39,6 +39,24 @@ export default async function ResourceDetailPage({
   const cat = categories[r.category];
   const [lng, lat] = r.coords;
   const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+  // Schema.org type — civic/community service places get LocalBusiness so
+  // Google maps & search can surface hours / phone / directions correctly.
+  const placeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: r.name,
+    description: r.blurb,
+    ...(r.address && { address: r.address }),
+    ...(r.phone && { telephone: r.phone }),
+    ...(r.url && { url: r.url }),
+    ...(r.hours && { openingHours: r.hours }),
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: lat,
+      longitude: lng
+    }
+  };
   const mapboxStatic = TOKEN
     ? `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s+${cat.color.replace(
         "#",
@@ -48,6 +66,10 @@ export default async function ResourceDetailPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(placeJsonLd) }}
+      />
       <section className="container-wide pt-12 md:pt-16">
         <Link href="/get-help" className="btn-link text-sm">
           ← Back to the map

@@ -4,9 +4,11 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { Arrow } from "@/components/ProgramCard";
 import { EventMap } from "@/components/EventMap";
 import { asset } from "@/lib/asset";
+import { site } from "@/lib/site";
 import {
   events as allEvents,
   sortEvents,
+  eventEnd,
   formatDate,
   formatTime,
   icsHref,
@@ -19,13 +21,54 @@ export const metadata: Metadata = {
     "Press conferences, marches, vigils, and community trainings — every gathering is a moment to stand in solidarity."
 };
 
+// Schema.org Event entries for upcoming events — Google can surface these
+// directly in search results with date / location / organizer.
+function buildEventsJsonLd(events: EventItem[]) {
+  return events.map((e) => ({
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: e.title,
+    description: e.description,
+    startDate: e.start,
+    endDate: eventEnd(e).toISOString(),
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: e.location.name,
+      address: [e.location.address, e.location.city]
+        .filter(Boolean)
+        .join(", "),
+      ...(e.location.coords && {
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: e.location.coords[1],
+          longitude: e.location.coords[0]
+        }
+      })
+    },
+    organizer: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url
+    }
+  }));
+}
+
 export default function EventsPage() {
   // Use a stable date so static export is deterministic.
   const now = new Date();
   const { upcoming, past } = sortEvents(now);
+  const eventsJsonLd = buildEventsJsonLd(upcoming);
 
   return (
     <>
+      {eventsJsonLd.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsJsonLd) }}
+        />
+      )}
       <section className="container-wide py-16 md:py-20">
         <SectionHeader
           eyebrow="Events"

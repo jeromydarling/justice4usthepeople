@@ -54,6 +54,10 @@ jobs:
           # Mapbox + RSS — accept multiple secret-naming conventions
           NEXT_PUBLIC_MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN || secrets.NEXT_PUBLIC_MAPBOX_TOKEN || vars.MAPBOX_TOKEN }}
           NEXT_PUBLIC_RSS2JSON_API_KEY: ${{ secrets.RSS2JSON_API_KEY }}
+
+          # Admin page password (SHA-256 hex of the chosen password). If
+          # unset, /admin renders an "admin lock isn't configured" notice.
+          NEXT_PUBLIC_ADMIN_PASSWORD_SHA256: ${{ secrets.ADMIN_PASSWORD_SHA256 }}
         run: |
           # Print which public envs are set (without leaking values).
           echo "=== Build env summary ==="

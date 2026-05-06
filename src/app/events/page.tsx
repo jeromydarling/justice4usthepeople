@@ -163,8 +163,8 @@ function EventCard({
 }) {
   return (
     <article className="card grid gap-0 overflow-hidden md:grid-cols-12">
-      {/* Date column */}
-      <div className="bg-indigo-900 p-8 text-bone-50 md:col-span-3">
+      {/* Date column — compact on mobile, full editorial on desktop. */}
+      <div className="bg-indigo-900 p-5 text-bone-50 sm:p-6 md:col-span-3 md:p-8">
         {status === "upcoming" ? (
           <span className="inline-block rounded-full bg-ember-400 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-ink">
             Upcoming
@@ -174,13 +174,13 @@ function EventCard({
             Past
           </span>
         )}
-        <p className="mt-6 font-serif text-5xl leading-none">
+        <p className="mt-4 font-serif text-4xl leading-none sm:text-5xl md:mt-6">
           {new Date(event.start).toLocaleDateString("en-US", {
             day: "numeric",
             timeZone: "America/Chicago"
           })}
         </p>
-        <p className="mt-1 font-serif text-xl text-ember-200">
+        <p className="mt-1 font-serif text-lg text-ember-200 sm:text-xl">
           {new Date(event.start).toLocaleDateString("en-US", {
             month: "long",
             timeZone: "America/Chicago"
@@ -199,7 +199,7 @@ function EventCard({
       </div>
 
       {/* Content column */}
-      <div className="p-8 md:col-span-6">
+      <div className="p-6 sm:p-7 md:col-span-6 md:p-8">
         {event.rallying && <p className="eyebrow">{event.rallying}</p>}
         <h3 className="mt-2 font-serif text-2xl md:text-3xl">{event.title}</h3>
         {event.subtitle && (

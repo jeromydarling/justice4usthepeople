@@ -22,7 +22,7 @@ export default function GetHelpPage() {
         />
         <Link
           href="/find-loved-one"
-          className="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-ember-300 bg-ember-50 px-4 py-2 text-sm font-medium text-ember-700 no-underline transition hover:bg-ember-100"
+          className="mt-6 inline-block rounded-2xl border-2 border-ember-300 bg-ember-50 px-4 py-2.5 text-sm font-medium leading-snug text-ember-700 no-underline transition hover:bg-ember-100"
         >
           If a loved one was just detained → here are the next steps
         </Link>

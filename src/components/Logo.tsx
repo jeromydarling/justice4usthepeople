@@ -34,11 +34,12 @@ export function Logo({
       <BrandMark mark={mark} className={mark === "scales" ? "h-12 w-12 shrink-0" : "h-10 w-10 shrink-0"} />
       {showWordmark && (
         <span className="flex flex-col leading-none">
-          <span className={`font-serif text-lg tracking-tight ${fg}`}>
+          <span className={`font-serif text-base sm:text-lg tracking-tight ${fg}`}>
             Justice <span className="text-ember-500">4</span> Us The People
           </span>
+          {/* Sub-tagline hidden on smallest phones to make room for header utilities. */}
           <span
-            className={`mt-1 text-[10px] font-medium uppercase tracking-[0.22em] ${subFg}`}
+            className={`mt-1 hidden sm:inline text-[10px] font-medium uppercase tracking-[0.22em] ${subFg}`}
           >
             Stand in solidarity · Minnesota
           </span>

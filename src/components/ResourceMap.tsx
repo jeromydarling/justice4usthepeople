@@ -164,7 +164,7 @@ export function ResourceMap() {
       <div className="relative md:col-span-8">
         <div
           ref={mapEl}
-          className="h-[480px] w-full overflow-hidden rounded-2xl ring-1 ring-ink/10 md:h-[640px]"
+          className="h-[360px] w-full overflow-hidden rounded-2xl ring-1 ring-ink/10 sm:h-[480px] md:h-[640px]"
         />
         {selected && (
           <div className="absolute bottom-4 left-4 right-4 card p-5 md:max-w-md">

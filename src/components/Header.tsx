@@ -8,11 +8,9 @@ import { primaryNav, type NavGroup } from "@/lib/site";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  // Which dropdown (by index) is open. Only one at a time.
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on outside click / Escape.
   useEffect(() => {
     function onClick(e: MouseEvent) {
       if (!navRef.current?.contains(e.target as Node)) setOpenDropdown(null);
@@ -30,9 +28,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-bone-50/85 backdrop-blur print:hidden">
-      <div className="container-wide flex items-center justify-between gap-6 py-3">
+      <div className="container-wide flex items-center justify-between gap-3 py-3 md:gap-4">
         <Logo />
-        <div ref={navRef} className="hidden items-center gap-1 md:flex">
+        <div ref={navRef} className="hidden items-center gap-0.5 md:flex">
           {primaryNav.map((g, i) => (
             <NavDropdown
               key={g.label}
@@ -40,12 +38,23 @@ export function Header() {
               isOpen={openDropdown === i}
               onOpen={() => setOpenDropdown(i)}
               onClose={() => setOpenDropdown((cur) => (cur === i ? null : cur))}
+              alignRight={i === primaryNav.length - 1}
             />
           ))}
         </div>
         <div className="flex items-center gap-2">
           <SiteSearch />
           <LangSwitcher />
+          {/* Donate visible on tablet+, full membership CTA on desktop+. */}
+          <Link href="/donate" className="hidden btn-ember md:inline-flex">
+            Donate
+          </Link>
+          <Link
+            href="/membership"
+            className="hidden btn-primary lg:inline-flex"
+          >
+            Become a member
+          </Link>
           <button
             type="button"
             aria-label="Open menu"
@@ -62,18 +71,6 @@ export function Header() {
               />
             </svg>
           </button>
-        </div>
-      </div>
-
-      {/* Right-aligned action buttons row (desktop only) */}
-      <div className="hidden border-t border-ink/5 md:block">
-        <div className="container-wide flex items-center justify-end gap-2 py-2">
-          <Link href="/donate" className="btn-ember">
-            Donate
-          </Link>
-          <Link href="/membership" className="btn-primary">
-            Become a member
-          </Link>
         </div>
       </div>
 
@@ -136,16 +133,16 @@ function NavDropdown({
   group,
   isOpen,
   onOpen,
-  onClose
+  onClose,
+  alignRight = false
 }: {
   group: NavGroup;
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  alignRight?: boolean;
 }) {
-  // Hover-to-open with a small close delay, plus click and keyboard support.
   const closeTimer = useRef<number | null>(null);
-
   function clearClose() {
     if (closeTimer.current !== null) {
       window.clearTimeout(closeTimer.current);
@@ -173,7 +170,7 @@ function NavDropdown({
         onClick={() => (isOpen ? onClose() : onOpen())}
         onFocus={onOpen}
         className={
-          "inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm font-medium no-underline transition " +
+          "inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium no-underline transition lg:px-3 " +
           (isOpen
             ? "bg-ink/5 text-indigo-700"
             : "text-ink/80 hover:bg-ink/5 hover:text-indigo-700")
@@ -189,7 +186,10 @@ function NavDropdown({
       {isOpen && (
         <div
           role="menu"
-          className="absolute left-0 top-full z-50 mt-1 min-w-[16rem] overflow-hidden rounded-xl border border-ink/10 bg-bone-50 py-2 shadow-lg"
+          className={
+            "absolute top-full z-50 mt-1 min-w-[16rem] overflow-hidden rounded-xl border border-ink/10 bg-bone-50 py-2 shadow-lg " +
+            (alignRight ? "right-0" : "left-0")
+          }
           onMouseEnter={clearClose}
           onMouseLeave={scheduleClose}
         >

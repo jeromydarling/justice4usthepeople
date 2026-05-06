@@ -3,6 +3,7 @@ import Link from "next/link";
 import { products } from "@/lib/products";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Arrow } from "@/components/ProgramCard";
+import { asset } from "@/lib/asset";
 
 export const metadata: Metadata = {
   title: "Store",
@@ -33,7 +34,8 @@ export default function StorePage() {
                   aria-hidden
                 >
                   {p.imageSrc && (
-                    <img src={p.imageSrc} alt={p.name} className="h-full w-full object-cover" />
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={asset(p.imageSrc)} alt={p.name} className="h-full w-full object-cover" />
                   )}
                 </div>
                 <div className="flex flex-1 flex-col gap-3 p-6">

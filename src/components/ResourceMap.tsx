@@ -115,14 +115,22 @@ export function ResourceMap() {
 
   if (!TOKEN) {
     return (
-      <div className="card p-6">
-        <p className="eyebrow">Map setup</p>
-        <h3 className="mt-2 text-xl">Add a Mapbox token to load the live map.</h3>
-        <p className="mt-3 text-sm text-ink-muted">
-          Set <code>NEXT_PUBLIC_MAPBOX_TOKEN</code> in your build environment.
-          Until then, the resources below are fully usable.
-        </p>
-        <div className="mt-6">
+      <div className="card overflow-hidden">
+        <div className="bg-ember-100 border-b border-ember-300 p-5 text-sm">
+          <p className="eyebrow text-ember-700">Map not configured</p>
+          <p className="mt-2 text-ink">
+            The live Mapbox map needs a token to load. Add a{" "}
+            <strong>repository secret named <code>MAPBOX_TOKEN</code></strong>{" "}
+            in <em>Settings → Secrets and variables → Actions</em>, then re-run
+            the latest deploy workflow.
+          </p>
+          <p className="mt-2 text-xs text-ink-muted">
+            The deploy workflow logs include a "Build env summary" line that
+            shows which envs were picked up — useful for spotting a typo'd
+            secret name.
+          </p>
+        </div>
+        <div className="p-5">
           <ResourceList resources={visible} active={active} setActive={setActive} />
         </div>
       </div>

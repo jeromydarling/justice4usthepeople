@@ -51,10 +51,18 @@ jobs:
           NEXT_PUBLIC_STRIPE_TSHIRT: ${{ secrets.STRIPE_TSHIRT }}
           NEXT_PUBLIC_STRIPE_BUTTON_PACK: ${{ secrets.STRIPE_BUTTON_PACK }}
 
-          # Mapbox + RSS
-          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
+          # Mapbox + RSS — accept multiple secret-naming conventions
+          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN || secrets.NEXT_PUBLIC_MAPBOX_TOKEN || vars.MAPBOX_TOKEN }}
           NEXT_PUBLIC_RSS2JSON_API_KEY: ${{ secrets.RSS2JSON_API_KEY }}
-        run: npm run build
+        run: |
+          # Print which public envs are set (without leaking values).
+          echo "=== Build env summary ==="
+          for v in NEXT_PUBLIC_BASE_PATH NEXT_PUBLIC_FORM_ENDPOINT NEXT_PUBLIC_MAPBOX_TOKEN \
+                   NEXT_PUBLIC_STRIPE_DONATE_25 NEXT_PUBLIC_STRIPE_DONATE_CUSTOM \
+                   NEXT_PUBLIC_STRIPE_YARDSIGN; do
+            if [ -n "${!v}" ]; then echo "  ✓ $v set"; else echo "  ✗ $v EMPTY"; fi
+          done
+          npm run build
 
       - name: Add GitHub Pages files (.nojekyll, 404 fallback, CNAME)
         run: |

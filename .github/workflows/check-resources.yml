@@ -1,0 +1,101 @@
+name: Check resource URLs
+
+# Pings every resource URL on /get-help and updates a tracking issue when
+# anything is broken or overdue for verification. Runs monthly + on demand.
+
+on:
+  schedule:
+    # 1st of each month at 14:00 UTC (~9 AM Central)
+    - cron: "0 14 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: check-resources
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run link checker
+        id: check
+        run: |
+          set -o pipefail
+          # Capture report to file; tee to log; preserve script exit code.
+          npm run -s check-resources | tee report.md
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+
+      - name: Open / update tracking issue when anything is unhealthy
+        if: steps.check.outputs.exit_code != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('report.md', 'utf8');
+            const title = 'Resource verification needs attention';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'resource-verification'
+            });
+            if (issues.length > 0) {
+              const num = issues[0].number;
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: num,
+                body
+              });
+              core.notice(`Updated existing issue #${num}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['resource-verification']
+              });
+              core.notice(`Opened issue #${created.data.number}`);
+            }
+
+      - name: Close tracking issue when everything healthy
+        if: steps.check.outputs.exit_code == '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'resource-verification'
+            });
+            for (const i of issues) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: i.number,
+                body: 'All resource URLs healthy and verifications current. Auto-closing.'
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: i.number,
+                state: 'closed'
+              });
+            }

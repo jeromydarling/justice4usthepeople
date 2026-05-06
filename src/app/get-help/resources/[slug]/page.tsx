@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Arrow } from "@/components/ProgramCard";
 import { resources, categories, type Resource } from "@/lib/resources";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
 
 type Params = Promise<{ slug: string }>;
 
@@ -79,12 +80,12 @@ export default async function ResourceDetailPage({
       <section className="container-wide py-6 md:py-8">
         <div className="grid items-start gap-10 md:grid-cols-12">
           <div className="md:col-span-7">
-            <p
-              className="eyebrow"
-              style={{ color: cat.color }}
-            >
-              {cat.label}
-            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="eyebrow" style={{ color: cat.color }}>
+                {cat.label}
+              </p>
+              <VerifiedBadge r={r} />
+            </div>
             <h1 className="mt-2">{r.name}</h1>
             <p className="mt-4 text-lg text-ink-soft">{r.blurb}</p>
 

@@ -77,28 +77,36 @@ export function ResourceMap() {
 
     const bounds = new mapboxgl.LngLatBounds();
     for (const r of visible) {
-      const el = document.createElement("button");
-      el.type = "button";
-      el.setAttribute("aria-label", r.name);
-      el.className = "j4-marker";
-      el.style.cssText = `
-        position: relative;
+      // Outer wrapper — Mapbox sets `transform: translate3d(...)` on this
+      // element to position the marker. Touching its transform clobbers
+      // positioning and the dot "bounces" to (0,0). Keep this clean.
+      const wrap = document.createElement("div");
+      wrap.style.cssText = "width: 26px; height: 26px;";
+
+      // Inner dot owns its own transform for the hover scale.
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.setAttribute("aria-label", r.name);
+      dot.className = "j4-marker";
+      dot.style.cssText = `
         width: 26px; height: 26px; border-radius: 9999px;
         background: ${categories[r.category].color};
         border: 3px solid #fbf8f2;
         box-shadow: 0 6px 18px -4px rgba(20,23,28,.45);
         cursor: pointer; padding: 0;
         transition: transform .15s ease;
+        display: block;
       `;
-      el.addEventListener("mouseenter", () => (el.style.transform = "scale(1.18)"));
-      el.addEventListener("mouseleave", () => (el.style.transform = "scale(1)"));
-      el.addEventListener("click", (e) => {
+      dot.addEventListener("mouseenter", () => (dot.style.transform = "scale(1.18)"));
+      dot.addEventListener("mouseleave", () => (dot.style.transform = "scale(1)"));
+      dot.addEventListener("click", (e) => {
         e.stopPropagation();
         setSelected(r);
         map.flyTo({ center: r.coords, zoom: Math.max(map.getZoom(), 12.2), speed: 0.8 });
       });
+      wrap.appendChild(dot);
 
-      const marker = new mapboxgl.Marker({ element: el, anchor: "center" })
+      const marker = new mapboxgl.Marker({ element: wrap, anchor: "center" })
         .setLngLat(r.coords)
         .addTo(map);
       markersRef.current.push(marker);

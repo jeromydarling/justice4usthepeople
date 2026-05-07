@@ -6,9 +6,11 @@ import { site } from "@/lib/site";
 // "Watch our promo video" CTA + modal player. Plays /public/promo/promo.mp4
 // rendered by the render-promo GitHub Action.
 export function PromoVideoButton({
-  variant = "ember"
+  variant = "ember",
+  label = "Watch our 60-second promo"
 }: {
   variant?: "ember" | "primary" | "ghost";
+  label?: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -20,7 +22,7 @@ export function PromoVideoButton({
         aria-haspopup="dialog"
       >
         <PlayIcon />
-        Watch our 60-second promo
+        {label}
       </button>
       {open && <PromoModal onClose={() => setOpen(false)} />}
     </>

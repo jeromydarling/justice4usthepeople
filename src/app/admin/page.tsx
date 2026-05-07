@@ -4,6 +4,11 @@ import Link from "next/link";
 import { events, sortEvents, formatDate } from "@/lib/events";
 import { feeds } from "@/lib/news";
 import { site } from "@/lib/site";
+import { QuickLinks } from "@/components/admin/QuickLinks";
+import { TalkToClaude } from "@/components/admin/TalkToClaude";
+import { PromptLibrary } from "@/components/admin/PromptLibrary";
+import { Playbook } from "@/components/admin/Playbook";
+import { Glossary } from "@/components/admin/Glossary";
 
 // Privacy-fence admin. Hash of the password is shipped in the bundle (via a
 // public env var) — anyone determined can extract it, but a long passphrase
@@ -97,22 +102,46 @@ function Gate({ onUnlock }: { onUnlock: () => void }) {
 
 // ---------------------------------------------------------------------------
 
+const TOC: { id: string; label: string }[] = [
+  { id: "links", label: "Quick links" },
+  { id: "talk", label: "How to talk to Claude" },
+  { id: "prompts", label: "Prompt library" },
+  { id: "files", label: "Where things live" },
+  { id: "playbook", label: "Common tasks" },
+  { id: "github", label: "Working with GitHub" },
+  { id: "scope", label: "Asking for new features" },
+  { id: "glossary", label: "Glossary" },
+  { id: "newsletter", label: "Newsletter list" },
+  { id: "digest", label: "Compose digest" }
+];
+
 function AdminConsole() {
   return (
     <>
       <section className="container-wide py-12 md:py-16">
-        <p className="eyebrow">Admin</p>
+        <p className="eyebrow">Admin · help center</p>
         <h1 className="mt-2 font-serif text-3xl md:text-4xl">
           Behind the curtain.
         </h1>
         <p className="mt-3 max-w-2xl text-ink-soft">
-          Three things live here: how to talk to Claude (your CMS), how to
-          view your newsletter subscribers, and how to compose this
-          week&rsquo;s digest in one click.
+          Everything you need to run this site by talking to Claude — no code,
+          no jargon. Skim the prompt library, lean on the playbook when
+          something feels off, and use the digest composer once a week.
         </p>
+        <nav className="mt-6 flex flex-wrap gap-2" aria-label="Help center sections">
+          {TOC.map((t) => (
+            <a
+              key={t.id}
+              href={`#${t.id}`}
+              className="rounded-full border border-ink/15 bg-bone-50 px-3 py-1.5 text-xs font-medium text-ink no-underline transition hover:bg-ink/5"
+            >
+              {t.label}
+            </a>
+          ))}
+        </nav>
         <button
           type="button"
-          className="btn-link mt-3 text-sm"
+          className="btn-link mt-5 text-sm"
           onClick={() => {
             sessionStorage.removeItem(STORAGE_KEY);
             location.reload();
@@ -122,100 +151,23 @@ function AdminConsole() {
         </button>
       </section>
 
-      <CmsCheatSheet />
+      <div id="links"></div>
+      <QuickLinks />
+      <TalkToClaude />
+      <PromptLibrary />
+      <div id="files"></div>
       <WhereThingsLive />
+      <Playbook />
+      <div id="github"></div>
       <WorkingWithGitHub />
+      <div id="scope"></div>
       <AskingForFeatures />
+      <Glossary />
+      <div id="newsletter"></div>
       <SubscribersPanel />
+      <div id="digest"></div>
       <DigestComposer />
     </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-
-function CmsCheatSheet() {
-  // Examples favor things the org will actually need to do without involving
-  // a developer. Each prompt names the page or the data — Claude figures out
-  // the file. The framing below ("what + where") is the universal pattern.
-  const examples: { goal: string; prompt: string }[] = [
-    {
-      goal: "Add a resource on the map",
-      prompt:
-        "Add a new resource on /get-help: Casa de Esperanza, 1075 Atlantic St, St. Paul. Category: housing. Phone: 651-772-1611. Languages: English, Spanish. Blurb: bilingual domestic violence support, shelter, and advocacy."
-    },
-    {
-      goal: "Add an event",
-      prompt:
-        "Add an event for May 31 at 2pm: Vigil for TPS holders at the Cathedral of St. Paul. Coalition partners: AEDS, S.Y.L. Use the same pattern as the existing events."
-    },
-    {
-      goal: "Update a phone number or hours",
-      prompt:
-        "On the map, the phone for the People's Center is wrong. Change it to 612-332-4973."
-    },
-    {
-      goal: "Edit homepage copy",
-      prompt:
-        "On the homepage, change the headline from 'Stand in solidarity' to 'Neighbors for one another' — keep the orange '4'."
-    },
-    {
-      goal: "Add a story",
-      prompt:
-        "Add a new story to /stories. Title: 'After the call.' Tag: court accompaniment. Lede: 'A first-time volunteer realized why a row of neighbors matters.' Body: 4 sentences in privacy-safe language."
-    },
-    {
-      goal: "Mark a resource as verified",
-      prompt:
-        "I just confirmed the People's Center is still accurate — set its verifiedAt to today's date."
-    }
-  ];
-  return (
-    <section className="container-wide pb-12">
-      <div className="card p-8">
-        <p className="eyebrow">Day-to-day editing with Claude</p>
-        <h2 className="mt-2 font-serif text-2xl">
-          Tell Claude <em>what</em> you want changed, and <em>where</em>.
-        </h2>
-        <p className="mt-2 max-w-2xl text-ink-soft">
-          You don&rsquo;t need to know code, file names, or terminology. Open
-          Claude with your repo, paraphrase one of these, and Claude does
-          the rest — finds the right file, makes the change, opens a pull
-          request, and the site rebuilds in about 90 seconds.
-        </p>
-        <ul className="mt-6 grid gap-5 md:grid-cols-2">
-          {examples.map((ex, i) => (
-            <li key={i} className="rounded-xl bg-bone-100 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
-                {ex.goal}
-              </p>
-              <p className="mt-2 text-sm text-ink">{ex.prompt}</p>
-              <button
-                type="button"
-                onClick={() => navigator.clipboard?.writeText(ex.prompt)}
-                className="btn-link mt-2 text-xs"
-              >
-                Copy prompt
-              </button>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-6 rounded-lg border border-indigo-200 bg-indigo-50 p-4 text-sm leading-relaxed text-indigo-900">
-          <p className="font-semibold">Stuck on what to ask?</p>
-          <p className="mt-1">
-            Two prompts that always work:
-            <br />
-            <span className="font-mono text-xs">
-              &quot;What file would I edit to change [thing]?&quot;
-            </span>
-            <br />
-            <span className="font-mono text-xs">
-              &quot;Show me how to do [thing] on this site.&quot;
-            </span>
-          </p>
-        </div>
-      </div>
-    </section>
   );
 }
 

@@ -227,6 +227,54 @@ const categories: Category[] = [
     ]
   },
   {
+    id: "videos",
+    label: "Videos",
+    intro:
+      "The 60-second promo is HTML you can edit. Ask Claude to reshape it, add new variants, swap the music, or generate language-specific cuts.",
+    prompts: [
+      {
+        goal: "Render a fresh promo with new music",
+        prompt:
+          "Re-render the promo video. Keep the composition the same but generate a fresh ElevenLabs music track — a slightly more upbeat brief, still folk-Americana with no vocals. Open the PR with the new MP4."
+      },
+      {
+        goal: "Make a 30-second cut focused on KYR",
+        prompt:
+          "Create a 30-second cutdown of the promo focused on Know Your Rights. Open with the bilingual KYR card, then the three doors, then the closing CTA. Use the same skyline backdrop. Save as promo/index-kyr-30s.html and add a script to render it."
+      },
+      {
+        goal: "Render a Spanish-language version",
+        prompt:
+          "Make a Spanish-language cut of the promo at promo/index-es.html. Translate every on-screen caption (DeepL quality) and update the closing CTA URL to /es. Keep the music and timing identical."
+      },
+      {
+        goal: "Swap the skyline image",
+        prompt:
+          "I dropped a new skyline image at public/promo/skyline.png. Re-stage it into the composition assets and re-render. Ask before committing the new MP4."
+      },
+      {
+        goal: "Update the script copy",
+        prompt:
+          "On the promo, change beat 3 from \"Every person carries an unshakable dignity\" to \"Every neighbor carries an unshakable dignity.\" Re-render."
+      },
+      {
+        goal: "Make a 15-second event teaser",
+        prompt:
+          "Create a 15-second teaser for the March For Immigrants on March 21. Skyline backdrop, big date display, location, partners, CTA URL. Save as promo/march-21-teaser.html and add a render script. No need for music — the MP4 will play silently on social."
+      },
+      {
+        goal: "Add a holiday banner video",
+        prompt:
+          "Add a 10-second looping homepage banner video for Thanksgiving — the skyline, the brand mark, and \"Grateful for the neighbors who show up.\" Add a feature flag so we can turn it on/off."
+      },
+      {
+        goal: "Generate captions / transcript",
+        prompt:
+          "Produce a plain-text transcript of every caption in the promo (in time order) and save as promo/transcript.txt. Add a /promo/transcript page that displays it for accessibility."
+      }
+    ]
+  },
+  {
     id: "ask",
     label: "Just ask (no change)",
     intro:

@@ -5,9 +5,17 @@ import { events, sortEvents, formatDate } from "@/lib/events";
 import { feeds } from "@/lib/news";
 import { site } from "@/lib/site";
 import { QuickLinks } from "@/components/admin/QuickLinks";
+import { SiteHealth } from "@/components/admin/SiteHealth";
 import { TalkToClaude } from "@/components/admin/TalkToClaude";
 import { PromptLibrary } from "@/components/admin/PromptLibrary";
+import { Wizards } from "@/components/admin/Wizards";
+import { BrandAssets } from "@/components/admin/BrandAssets";
+import { EmailTemplates } from "@/components/admin/EmailTemplates";
+import { TranslationStatus } from "@/components/admin/TranslationStatus";
+import { VideoRunbook } from "@/components/admin/VideoRunbook";
 import { Playbook } from "@/components/admin/Playbook";
+import { SettingsAudit } from "@/components/admin/SettingsAudit";
+import { ActivityLog } from "@/components/admin/ActivityLog";
 import { Glossary } from "@/components/admin/Glossary";
 
 // Privacy-fence admin. Hash of the password is shipped in the bundle (via a
@@ -104,12 +112,20 @@ function Gate({ onUnlock }: { onUnlock: () => void }) {
 
 const TOC: { id: string; label: string }[] = [
   { id: "links", label: "Quick links" },
+  { id: "health", label: "Site health" },
   { id: "talk", label: "How to talk to Claude" },
   { id: "prompts", label: "Prompt library" },
+  { id: "wizards", label: "Quick-action wizards" },
+  { id: "brand", label: "Brand assets" },
+  { id: "emails", label: "Email templates" },
+  { id: "translations", label: "Translations" },
+  { id: "videos", label: "Videos" },
   { id: "files", label: "Where things live" },
   { id: "playbook", label: "Common tasks" },
   { id: "github", label: "Working with GitHub" },
   { id: "scope", label: "Asking for new features" },
+  { id: "settings", label: "Settings audit" },
+  { id: "activity", label: "Recent activity" },
   { id: "glossary", label: "Glossary" },
   { id: "newsletter", label: "Newsletter list" },
   { id: "digest", label: "Compose digest" }
@@ -153,8 +169,14 @@ function AdminConsole() {
 
       <div id="links"></div>
       <QuickLinks />
+      <SiteHealth />
       <TalkToClaude />
       <PromptLibrary />
+      <Wizards />
+      <BrandAssets />
+      <EmailTemplates />
+      <TranslationStatus />
+      <VideoRunbook />
       <div id="files"></div>
       <WhereThingsLive />
       <Playbook />
@@ -162,6 +184,8 @@ function AdminConsole() {
       <WorkingWithGitHub />
       <div id="scope"></div>
       <AskingForFeatures />
+      <SettingsAudit />
+      <ActivityLog />
       <Glossary />
       <div id="newsletter"></div>
       <SubscribersPanel />

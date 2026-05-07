@@ -4,8 +4,7 @@ import { asset } from "@/lib/asset";
 import { site } from "@/lib/site";
 
 // "Watch our promo video" CTA + modal player. Plays /public/promo/promo.mp4
-// when present (rendered by the render-promo GitHub Action). Until then, the
-// modal shows the poster image with a friendly "we're rendering it" notice.
+// rendered by the render-promo GitHub Action.
 export function PromoVideoButton({
   variant = "ember"
 }: {
@@ -30,14 +29,12 @@ export function PromoVideoButton({
 
 function PromoModal({ onClose }: { onClose: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [errored, setErrored] = useState(false);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
     }
     document.addEventListener("keydown", onKey);
-    // Lock body scroll while open.
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -67,22 +64,17 @@ function PromoModal({ onClose }: { onClose: () => void }) {
           ✕
         </button>
 
-        <div className="aspect-video w-full bg-indigo-900">
-          {errored ? (
-            <RenderingNotice />
-          ) : (
-            // eslint-disable-next-line jsx-a11y/media-has-caption
-            <video
-              ref={videoRef}
-              className="h-full w-full bg-black"
-              src={asset(site.promoVideoUrl)}
-              poster={asset(site.promoPosterUrl)}
-              controls
-              autoPlay
-              playsInline
-              onError={() => setErrored(true)}
-            />
-          )}
+        <div className="aspect-video w-full bg-black">
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <video
+            ref={videoRef}
+            className="h-full w-full"
+            src={asset(site.promoVideoUrl)}
+            poster={asset(site.promoPosterUrl)}
+            controls
+            autoPlay
+            playsInline
+          />
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 text-bone-100/90">
@@ -96,25 +88,6 @@ function PromoModal({ onClose }: { onClose: () => void }) {
             Support the work →
           </a>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function RenderingNotice() {
-  return (
-    <div
-      className="flex h-full w-full flex-col items-center justify-center gap-3 bg-cover bg-center p-8 text-center"
-      style={{ backgroundImage: `url(${asset(site.promoPosterUrl)})` }}
-    >
-      <div className="rounded-2xl bg-ink/70 p-6 text-bone-50 backdrop-blur">
-        <p className="text-xs uppercase tracking-[0.18em] text-ember-200">
-          Promo coming soon
-        </p>
-        <p className="mt-2 max-w-md text-base">
-          We&rsquo;re rendering the 60-second promo. Check back in a moment, or
-          read the script in <code className="rounded bg-bone-50/10 px-1.5 py-0.5 text-sm">/promo/script.md</code>.
-        </p>
       </div>
     </div>
   );

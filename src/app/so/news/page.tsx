@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { NewsFeed } from "@/components/NewsFeed";
 import { SectionHeader } from "@/components/SectionHeader";
-import { Arrow } from "@/components/ProgramCard";
 import { TranslationBanner } from "@/components/TranslationBanner";
 
 export const metadata: Metadata = {
   title: "Wararka iyo cusbooneysiinta",
-  description: "Wararka tooska ah ee ICE iyo daboolnaanta socdaalka.",
+  description:
+    "Wararka tooska ah ee ICE iyo daboolnaanta socdaalka oo ka yimid wakaaladaha aan aaminno.",
   alternates: { languages: { en: "/news", es: "/es/news", so: "/so/news" } }
 };
 
@@ -18,21 +18,36 @@ export default function NewsPageSO() {
         <SectionHeader
           eyebrow="Wadajir aragga"
           title="Wararka ICE iyo wararka maxalliga ah."
-          lede="Feed nool oo isha-badan — Minnesota Public Radio, Sahan Journal, Star Tribune, iyo qoraallada qaranka. Marna ma sax inno cinwaanada."
+          lede="Feed nool oo isha-badan — Minnesota Public Radio, Sahan Journal, Star Tribune, iyo qoraallada qaranka. Shaandhe mowduuca ama isha. Marna ma sax inno cinwaanada."
         />
+        <p className="mt-3 text-xs text-ink-muted">
+          Cinwaannada waxay si toos ah uga yimaadaan wakaaladaha Ingiriiska ku
+          qora. Shaandhada hoose waxay ku qoran yihiin Ingiriis.
+        </p>
+      </section>
+
+      <section className="container-wide pb-20">
+        <NewsFeed />
       </section>
 
       <section className="container-wide pb-24">
-        <div className="card p-8">
-          <p className="eyebrow">Feed-ka buuxa</p>
-          <h3 className="mt-2 font-serif text-2xl">Feed-ka tooska ah waa Ingiriis.</h3>
-          <p className="mt-3 text-ink-soft">
-            Wararka waxaa laga keenaa goobaha daboolaya socdaalka. Isticmaal
-            shaandhada bogga buuxa si aad u hesho daboolnaan gaar ah.
-          </p>
-          <Link href="/news" hrefLang="en" className="btn-primary mt-5">
-            Fur feed-ka buuxa <Arrow />
-          </Link>
+        <div className="card grid items-center gap-6 p-8 md:grid-cols-12">
+          <div className="md:col-span-8">
+            <p className="eyebrow">Ma haysataa tilmaan?</p>
+            <h3 className="font-serif text-2xl md:text-3xl">
+              Wadaag waxa aad arkayso.
+            </h3>
+            <p className="mt-2 text-ink-soft">
+              Dhaqdhaqaaqa la xaqiijiyay ee ICE, taariikhada maxkamadda,
+              weerarrada, ama dhaqdhaqaaqa siyaasadda maxalliga ah. Waxaan
+              u dirineynaa shabakadayada jawaab celinta degdega ah.
+            </p>
+          </div>
+          <div className="md:col-span-4 md:text-right">
+            <a className="btn-primary" href="tel:+16124241785">
+              Khadka tooska ah · 612-424-1785
+            </a>
+          </div>
         </div>
       </section>
     </>

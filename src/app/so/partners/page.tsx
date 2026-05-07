@@ -2,12 +2,42 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Arrow } from "@/components/ProgramCard";
+import { asset } from "@/lib/asset";
 import { TranslationBanner } from "@/components/TranslationBanner";
 
 export const metadata: Metadata = {
-  title: "Iskaashigaaga isbahaysiga",
-  description: "Hay'adaha aan kala shaqayno — diin, shaqo, qaramaynta sharciga, iyo adeegyada toos ah.",
+  title: "Iskaashiyada isbahaysiga",
+  description:
+    "Hay'adaha aan kala shaqayno — diin, shaqo, difaac, iyo adeegyo toos ah ee Minnesota.",
   alternates: { languages: { en: "/partners", es: "/es/partners", so: "/so/partners" } }
+};
+
+type CoalitionPartner = {
+  name: string;
+  short?: string;
+  blurb: string;
+  url?: string;
+  logo?: string;
+  category: "advocacy" | "faith" | "service" | "legal" | "labor";
+};
+
+const partners: CoalitionPartner[] = [
+  { name: "African Education Development Society", short: "AEDS", blurb: "Horumarinta bulshada Bariga Afrika, waxbarashada, iyo barnaamijyada dhalinyarada Twin Cities.", logo: "/partners/aeds.svg", category: "service" },
+  { name: "Somali Youth Link", short: "S.Y.L.", blurb: "Maamulis, hoggaan, iyo difaac la dhalinyarada Soomaaliyeed ee Minnesota.", logo: "/partners/syl.svg", category: "service" },
+  { name: "Immigrant Law Center of Minnesota", short: "ILCM", blurb: "Adeegyo sharci socdaalka, kiliinikada muwaadinnimada, iyo tababar Conozca Sus Derechos gobolka oo dhan.", url: "https://www.ilcm.org", category: "legal" },
+  { name: "MIRAC — MN Immigrant Rights Action Committee", short: "MIRAC", blurb: "Wuxuu iskuduwa shabakadda jawaab celinta degdega ah ee Minnesota dhaqdhaqaaqa la xaqiijiyay ee ICE iyo difaaca bulshada.", url: "https://miracmn.org", category: "advocacy" },
+  { name: "ISAIAH Minnesota", blurb: "Iskaashi diineed isir-badan oo u abaabula caddaalad jinsi iyo dhaqaale.", url: "https://isaiahmn.org", category: "faith" },
+  { name: "CTUL — Centro de Trabajadores Unidos en Lucha", short: "CTUL", blurb: "Urur shaqaale-hogaamiyay oo ah shaqaalaha mushaharka hooseeya. Kiliinigyo dhicitaan mushaarka iyo tababar KYR shaqada.", url: "https://ctul.net", category: "labor" },
+  { name: "COPAL Minnesota", blurb: "Urur Latinx ah ee caddaaladda jinsiga. Xuquuqda shaqaalaha, socdaalka, iyo lugaashiga muwaadiniinta.", url: "https://www.copalmn.org", category: "advocacy" },
+  { name: "MN Interfaith Coalition on Immigration", blurb: "Iskaashi bulshooyinka diinta ah oo bixiya raacid, magangelyo, iyo taageero diineed.", category: "faith" }
+];
+
+const categoryLabels: Record<CoalitionPartner["category"], string> = {
+  advocacy: "Difaac",
+  faith: "Diin",
+  service: "Adeeg toos ah",
+  legal: "Sharci",
+  labor: "Shaqo"
 };
 
 export default function PartnersPageSO() {
@@ -18,52 +48,68 @@ export default function PartnersPageSO() {
         <SectionHeader
           eyebrow="Isbahaysi"
           title="Bulsho ahaan."
-          lede="Shaqada way ka weyn tahay urur kasta keligood. Kuwani waa kuwa aan u jiilan nahay — diin, shaqo, caawimaad sharci, iyo adeeg toos ah."
+          lede="Shaqada way ka weyn tahay urur kasta. Kuwani waa kuwa aan u jiilan nahay — diin, shaqo, caawimaad sharci, iyo adeeg toos ah. Haddii ururkaaga ay tahay inuu ku jiro liiskan, nala soo xiriir."
         />
       </section>
 
       <section className="container-wide pb-12">
-        <div className="card p-8">
-          <p className="eyebrow">Iskaashiyada ugu muhiimsan</p>
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Partner name="African Education Development Society (AEDS)" category="Adeeg toos ah" blurb="Horumarinta bulshada Bariga Afrika, waxbarashada, iyo barnaamijyada dhalinyarada Twin Cities." />
-            <Partner name="Somali Youth Link (S.Y.L.)" category="Adeeg toos ah" blurb="Maamulis, hoggaan, iyo difaac la dhalinyarada Soomaaliyeed ee Minnesota." />
-            <Partner name="Immigrant Law Center of Minnesota (ILCM)" category="Sharci" blurb="Adeegyo sharci socdaal, kiliinikada muwaadinnimada, iyo tababarro Conozca Sus Derechos." url="https://www.ilcm.org" />
-            <Partner name="MIRAC" category="Difaac" blurb="Wuxuu isku duwaa shabakadda jawaab celinta degdega ah ee Minnesota." url="https://miracmn.org" />
-          </ul>
-        </div>
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {partners.map((p) => (
+            <li key={p.name}>
+              <article className="card flex h-full flex-col gap-3 p-6">
+                <div className="flex items-center gap-4">
+                  {p.logo ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={asset(p.logo)}
+                      alt={p.name}
+                      width={56}
+                      height={56}
+                      className="h-14 w-14 shrink-0"
+                    />
+                  ) : (
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-indigo-700/10 font-serif text-xl text-indigo-700">
+                      {(p.short ?? p.name).slice(0, 1)}
+                    </div>
+                  )}
+                  <div>
+                    <p className="eyebrow">{categoryLabels[p.category]}</p>
+                    <h3 className="mt-0.5 font-serif text-lg leading-snug">
+                      {p.short ?? p.name}
+                    </h3>
+                    {p.short && <p className="text-xs text-ink-muted">{p.name}</p>}
+                  </div>
+                </div>
+                <p className="text-sm text-ink-soft">{p.blurb}</p>
+                {p.url && (
+                  <a href={p.url} target="_blank" rel="noreferrer" className="btn-link mt-auto inline-flex pt-2 text-sm">
+                    Booqo goobta <Arrow />
+                  </a>
+                )}
+              </article>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-        <div className="mt-10 card grid items-center gap-6 p-8 md:grid-cols-12">
+      <section className="container-wide pb-24">
+        <div className="card grid items-center gap-6 p-8 md:grid-cols-12">
           <div className="md:col-span-8">
-            <p className="eyebrow">Liiska buuxa</p>
-            <h3 className="font-serif text-2xl md:text-3xl">Eeg dhammaan iskaashiyada.</h3>
+            <p className="eyebrow">Hay'adaha</p>
+            <h3 className="font-serif text-2xl md:text-3xl">Nala istaag, dadweynaha hortooda.</h3>
             <p className="mt-3 text-ink-soft">
-              Bogga buuxa oo wadata calaamadaha, faahfaahinta, iyo qaybaha
-              wuxuu ku qoran yahay Ingiriis.
+              Waxaan taageernaa oo cod siinnaa shaqada lammaanaha — dhacdooyin,
+              hadallo wadajir ah, waraaqo furan. Soo dir qoraal ku saabsan
+              ururkaaga iyo waxa aan wada qaban karno.
             </p>
           </div>
           <div className="md:col-span-4 md:text-right">
-            <Link href="/partners" className="btn-primary" hrefLang="en">
-              Eeg Ingiriisi <Arrow />
+            <Link href="/so/contact?topic=coalition" className="btn-primary" hrefLang="so">
+              Nala soo xiriir <Arrow />
             </Link>
           </div>
         </div>
       </section>
     </>
-  );
-}
-
-function Partner({ name, category, blurb, url }: { name: string; category: string; blurb: string; url?: string }) {
-  return (
-    <li className="rounded-2xl bg-bone-100 p-5">
-      <p className="text-xs font-semibold uppercase tracking-wider text-ember-700">{category}</p>
-      <p className="mt-2 font-serif text-lg leading-snug text-ink">{name}</p>
-      <p className="mt-2 text-sm text-ink-soft">{blurb}</p>
-      {url && (
-        <a href={url} target="_blank" rel="noreferrer" className="btn-link mt-2 inline-flex text-xs">
-          Eeg goobta →
-        </a>
-      )}
-    </li>
   );
 }

@@ -35,14 +35,17 @@ async function sha256Hex(s: string) {
 
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
 
+  // sessionStorage is client-only — promote to authed on mount if a previous
+  // unlock is still in this session. We render the gate eagerly (no
+  // hydration null-return) so the input field is visible even before JS
+  // hydrates.
   useEffect(() => {
-    setHydrated(true);
-    if (sessionStorage.getItem(STORAGE_KEY) === "1") setAuthed(true);
+    if (typeof window !== "undefined" && sessionStorage.getItem(STORAGE_KEY) === "1") {
+      setAuthed(true);
+    }
   }, []);
 
-  if (!hydrated) return null;
   if (!authed) return <Gate onUnlock={() => setAuthed(true)} />;
   return <AdminConsole />;
 }
@@ -86,16 +89,25 @@ function Gate({ onUnlock }: { onUnlock: () => void }) {
           shared admin password — you can rotate it any time by changing the
           repo secret <code>ADMIN_PASSWORD_SHA256</code>.
         </p>
-        <input
-          type="password"
-          autoFocus
-          required
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
-          placeholder="Password"
-          className="input"
-          autoComplete="current-password"
-        />
+        {/* Explicit field block — label + input with explicit border so it
+            never disappears against the cream card background. */}
+        <label htmlFor="admin-password" className="flex flex-col gap-1.5">
+          <span className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+            Password
+          </span>
+          <input
+            id="admin-password"
+            name="password"
+            type="password"
+            autoFocus
+            required
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            placeholder="Enter the shared admin password"
+            autoComplete="current-password"
+            className="w-full rounded-xl border-2 border-ink/20 bg-bone-50 px-4 py-3 text-base text-ink placeholder:text-ink-muted/70 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+          />
+        </label>
         <button type="submit" className="btn-primary" disabled={busy}>
           {busy ? "Checking…" : "Unlock"}
         </button>

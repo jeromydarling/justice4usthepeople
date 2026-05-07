@@ -19,6 +19,8 @@
     }
 
     /* ── Backdrop ───────────────────────────────────────────────────── */
+    /* The skyline is a cream-paper, ink-line illustration. We tint it to
+       indigo (so the brand pops) while keeping the line work visible. */
     .skyline {
       position: absolute;
       inset: 0;
@@ -26,7 +28,7 @@
       height: 100%;
       object-fit: cover;
       z-index: 0;
-      filter: saturate(1.05) contrast(1.05);
+      filter: brightness(0.55) sepia(0.7) hue-rotate(190deg) saturate(1.1);
       animation: skyline-pan 60s linear forwards;
     }
     .skyline-tint {
@@ -35,9 +37,9 @@
       z-index: 1;
       background: linear-gradient(
         180deg,
-        rgba(14,23,53,0.05) 0%,
-        rgba(14,23,53,0.20) 60%,
-        rgba(14,23,53,0.55) 100%
+        rgba(14,23,53,0.25) 0%,
+        rgba(14,23,53,0.55) 60%,
+        rgba(14,23,53,0.85) 100%
       );
       pointer-events: none;
     }

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState, FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactElement } from "react";
 import Link from "next/link";
 import { events, sortEvents, formatDate } from "@/lib/events";
 import { feeds } from "@/lib/news";
@@ -122,91 +122,272 @@ function Gate({ onUnlock }: { onUnlock: () => void }) {
 }
 
 // ---------------------------------------------------------------------------
+// Tab system
+// ---------------------------------------------------------------------------
+// Each section is its own tab. Only one renders at a time. The URL hash
+// remembers which tab is active so it's bookmarkable / shareable.
 
-const TOC: { id: string; label: string }[] = [
-  { id: "links", label: "Quick links" },
-  { id: "health", label: "Site health" },
-  { id: "talk", label: "How to talk to Claude" },
-  { id: "autopilot", label: "Autopilot prompts" },
-  { id: "prompts", label: "Prompt library" },
-  { id: "wizards", label: "Quick-action wizards" },
-  { id: "brand", label: "Brand assets" },
-  { id: "emails", label: "Email templates" },
-  { id: "translations", label: "Translations" },
-  { id: "videos", label: "Videos" },
-  { id: "files", label: "Where things live" },
-  { id: "playbook", label: "Common tasks" },
-  { id: "github", label: "Working with GitHub" },
-  { id: "scope", label: "Asking for new features" },
-  { id: "settings", label: "Settings audit" },
-  { id: "activity", label: "Recent activity" },
-  { id: "glossary", label: "Glossary" },
-  { id: "newsletter", label: "Newsletter list" },
-  { id: "digest", label: "Compose digest" }
+type Tab = {
+  id: string;
+  label: string;
+  description: string;
+  Component: () => ReactElement;
+};
+
+type TabGroup = { label: string; tabs: Tab[] };
+
+const tabGroups: TabGroup[] = [
+  {
+    label: "Get oriented",
+    tabs: [
+      { id: "links", label: "Quick links", description: "Bookmarkable destinations.", Component: QuickLinks },
+      { id: "health", label: "Site health", description: "At-a-glance counts.", Component: SiteHealth }
+    ]
+  },
+  {
+    label: "Use Claude well",
+    tabs: [
+      { id: "talk", label: "How to talk to Claude", description: "Anatomy of a good prompt.", Component: TalkToClaude },
+      { id: "autopilot", label: "Autopilot prompts", description: "Make Claude finish the job.", Component: Autopilot },
+      { id: "prompts", label: "Prompt library", description: "Categorized, copyable prompts.", Component: PromptLibrary },
+      { id: "wizards", label: "Quick-action wizards", description: "Forms that write your prompt for you.", Component: Wizards }
+    ]
+  },
+  {
+    label: "Brand & content",
+    tabs: [
+      { id: "brand", label: "Brand assets", description: "Colors, logos, mission, tagline.", Component: BrandAssets },
+      { id: "emails", label: "Email templates", description: "Common org emails, ready to send.", Component: EmailTemplates },
+      { id: "translations", label: "Translations", description: "Language coverage by page.", Component: TranslationStatus },
+      { id: "videos", label: "Videos", description: "How the promo gets made.", Component: VideoRunbook }
+    ]
+  },
+  {
+    label: "Reference",
+    tabs: [
+      { id: "files", label: "Where things live", description: "Plain-English file map.", Component: WhereThingsLive },
+      { id: "playbook", label: "Common tasks", description: "Cadence + troubleshooting.", Component: Playbook },
+      { id: "github", label: "Working with GitHub", description: "The shortest GitHub primer.", Component: WorkingWithGitHub },
+      { id: "scope", label: "Asking for new features", description: "Three buckets of new asks.", Component: AskingForFeatures },
+      { id: "glossary", label: "Glossary", description: "Plain-English definitions.", Component: Glossary }
+    ]
+  },
+  {
+    label: "Behind the scenes",
+    tabs: [
+      { id: "settings", label: "Settings audit", description: "Every secret, in plain English.", Component: SettingsAudit },
+      { id: "activity", label: "Recent activity", description: "Last 10 commits humanized.", Component: ActivityLog }
+    ]
+  },
+  {
+    label: "Newsletter",
+    tabs: [
+      { id: "newsletter", label: "Subscriber list", description: "Where the addresses live.", Component: SubscribersPanel },
+      { id: "digest", label: "Compose digest", description: "One-click weekly send.", Component: DigestComposer }
+    ]
+  }
 ];
 
+const allTabs: Tab[] = tabGroups.flatMap((g) => g.tabs);
+const DEFAULT_TAB = "links";
+
 function AdminConsole() {
+  const [activeId, setActiveId] = useState(DEFAULT_TAB);
+
+  // Sync with URL hash so a tab choice is shareable / bookmarkable.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const fromHash = (location.hash || "").replace(/^#/, "");
+    if (fromHash && allTabs.some((t) => t.id === fromHash)) {
+      setActiveId(fromHash);
+    }
+    const onHash = () => {
+      const h = (location.hash || "").replace(/^#/, "");
+      if (h && allTabs.some((t) => t.id === h)) setActiveId(h);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const active = allTabs.find((t) => t.id === activeId) ?? allTabs[0];
+
+  function selectTab(id: string) {
+    setActiveId(id);
+    if (typeof window !== "undefined") {
+      history.replaceState(null, "", `#${id}`);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
   return (
     <>
-      <section className="container-wide py-12 md:py-16">
-        <p className="eyebrow">Admin · help center</p>
-        <h1 className="mt-2 font-serif text-3xl md:text-4xl">
-          Behind the curtain.
-        </h1>
-        <p className="mt-3 max-w-2xl text-ink-soft">
-          Everything you need to run this site by talking to Claude — no code,
-          no jargon. Skim the prompt library, lean on the playbook when
-          something feels off, and use the digest composer once a week.
-        </p>
-        <nav className="mt-6 flex flex-wrap gap-2" aria-label="Help center sections">
-          {TOC.map((t) => (
-            <a
-              key={t.id}
-              href={`#${t.id}`}
-              className="rounded-full border border-ink/15 bg-bone-50 px-3 py-1.5 text-xs font-medium text-ink no-underline transition hover:bg-ink/5"
-            >
-              {t.label}
-            </a>
-          ))}
-        </nav>
-        <button
-          type="button"
-          className="btn-link mt-5 text-sm"
-          onClick={() => {
-            sessionStorage.removeItem(STORAGE_KEY);
-            location.reload();
-          }}
-        >
-          Sign out
-        </button>
+      <section className="container-wide py-10 md:py-12">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="eyebrow">Admin · help center</p>
+            <h1 className="mt-2 font-serif text-3xl md:text-4xl">
+              Behind the curtain.
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm text-ink-soft">
+              Pick a section below. Each one is its own page — no scrolling
+              forever to find the digest composer.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="btn-link text-sm"
+            onClick={() => {
+              sessionStorage.removeItem(STORAGE_KEY);
+              location.reload();
+            }}
+          >
+            Sign out
+          </button>
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <TabPicker activeId={activeId} onSelect={selectTab} />
+          <span className="text-sm text-ink-muted">
+            <strong className="text-ink">{active.label}</strong> ·{" "}
+            {active.description}
+          </span>
+        </div>
       </section>
 
-      <div id="links"></div>
-      <QuickLinks />
-      <SiteHealth />
-      <TalkToClaude />
-      <Autopilot />
-      <PromptLibrary />
-      <Wizards />
-      <BrandAssets />
-      <EmailTemplates />
-      <TranslationStatus />
-      <VideoRunbook />
-      <div id="files"></div>
-      <WhereThingsLive />
-      <Playbook />
-      <div id="github"></div>
-      <WorkingWithGitHub />
-      <div id="scope"></div>
-      <AskingForFeatures />
-      <SettingsAudit />
-      <ActivityLog />
-      <Glossary />
-      <div id="newsletter"></div>
-      <SubscribersPanel />
-      <div id="digest"></div>
-      <DigestComposer />
+      {/* Active tab body — only the selected component is mounted. */}
+      <active.Component />
+
+      {/* Footer of the help center: prev/next nav between tabs */}
+      <TabFooter activeId={activeId} onSelect={selectTab} />
     </>
+  );
+}
+
+function TabPicker({
+  activeId,
+  onSelect
+}: {
+  activeId: string;
+  onSelect: (id: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  const active = allTabs.find((t) => t.id === activeId) ?? allTabs[0];
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex items-center gap-2 rounded-xl border-2 border-ink/15 bg-bone-50 px-4 py-2.5 text-sm font-medium text-ink hover:bg-ink/5"
+      >
+        <span>{active.label}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      </button>
+      {open && (
+        <div
+          role="menu"
+          className="absolute left-0 top-full z-50 mt-1 max-h-[70vh] w-[20rem] overflow-y-auto rounded-xl border border-ink/10 bg-bone-50 py-2 shadow-lg sm:w-[24rem]"
+        >
+          {tabGroups.map((g) => (
+            <div key={g.label} className="mb-2 last:mb-0">
+              <p className="px-4 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-muted">
+                {g.label}
+              </p>
+              <ul>
+                {g.tabs.map((t) => (
+                  <li key={t.id}>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        onSelect(t.id);
+                        setOpen(false);
+                      }}
+                      className={
+                        "block w-full px-4 py-2 text-left text-sm transition " +
+                        (t.id === activeId
+                          ? "bg-indigo-700 text-bone-50"
+                          : "text-ink hover:bg-ink/5")
+                      }
+                    >
+                      <span className="block font-medium">{t.label}</span>
+                      <span
+                        className={
+                          "mt-0.5 block text-xs " +
+                          (t.id === activeId ? "text-bone-200" : "text-ink-muted")
+                        }
+                      >
+                        {t.description}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TabFooter({
+  activeId,
+  onSelect
+}: {
+  activeId: string;
+  onSelect: (id: string) => void;
+}) {
+  const idx = allTabs.findIndex((t) => t.id === activeId);
+  const prev = idx > 0 ? allTabs[idx - 1] : null;
+  const next = idx < allTabs.length - 1 ? allTabs[idx + 1] : null;
+  return (
+    <section className="container-wide pb-16">
+      <div className="card flex flex-wrap items-center justify-between gap-3 p-5 text-sm">
+        {prev ? (
+          <button
+            type="button"
+            onClick={() => onSelect(prev.id)}
+            className="btn-ghost"
+          >
+            ← {prev.label}
+          </button>
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <button
+            type="button"
+            onClick={() => onSelect(next.id)}
+            className="btn-primary"
+          >
+            {next.label} →
+          </button>
+        ) : (
+          <span />
+        )}
+      </div>
+    </section>
   );
 }
 

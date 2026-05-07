@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "check-resources": "tsx scripts/check-resource-urls.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
-    "prebuild": "tsx scripts/build-search-index.ts",
+    "build-translation-coverage": "tsx scripts/build-translation-coverage.ts",
+    "prebuild": "tsx scripts/build-search-index.ts && tsx scripts/build-translation-coverage.ts",
     "promo:music": "tsx scripts/generate-promo-music.ts",
     "promo:render": "cd promo && npx -y hyperframes render"
   },

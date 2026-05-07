@@ -4,40 +4,49 @@
   <meta charset="utf-8" />
   <title>Justice 4 Us The People — 60s promo</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0e1735; font-family: 'Inter', sans-serif; }
+    html, body { background: #0e1735; font-family: 'Inter', sans-serif; color: #fbf8f2; }
 
+    /* The composition stage. */
     #stage {
       position: relative;
       width: 1920px;
       height: 1080px;
       overflow: hidden;
-      color: #fbf8f2;
+      isolation: isolate;
     }
 
-    /* Each clip starts hidden; hyperframes orchestrates start/end via attrs.
-       We use CSS @keyframes for in/out animation, scoped to each clip. */
-    .clip {
+    /* ── Backdrop ───────────────────────────────────────────────────── */
+    .skyline {
       position: absolute;
       inset: 0;
-      opacity: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      filter: saturate(1.05) contrast(1.05);
+      animation: skyline-pan 60s linear forwards;
     }
-    .skyline-clip {
-      animation: skyline-in 1s ease-out 0s forwards,
-                 skyline-pan 56s linear 0s forwards;
-    }
-    @keyframes skyline-in {
-      from { opacity: 0; transform: scale(1.04); }
-      to   { opacity: 1; transform: scale(1.0); }
+    .skyline-tint {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        180deg,
+        rgba(14,23,53,0.05) 0%,
+        rgba(14,23,53,0.20) 60%,
+        rgba(14,23,53,0.55) 100%
+      );
+      pointer-events: none;
     }
     @keyframes skyline-pan {
-      from { transform: translateY(40px) scale(1.06); }
+      from { transform: translateY(20px) scale(1.06); }
       to   { transform: translateY(-20px) scale(1.02); }
     }
 
-    /* Brand mark in the lower-left throughout. */
+    /* ── Brand mark (persistent lower-left) ─────────────────────────── */
     .brandmark {
       position: absolute;
       left: 80px;
@@ -45,223 +54,202 @@
       display: flex;
       align-items: center;
       gap: 18px;
-      animation: fade-in 0.6s ease-out 0.4s both;
+      z-index: 8;
     }
     .brandmark img { width: 84px; height: 84px; }
-    .brandmark .wordmark { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; color: #fbf8f2; }
+    .brandmark .wordmark {
+      font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700;
+      color: #fbf8f2; line-height: 1.05;
+    }
     .brandmark .wordmark .four { color: #dc972f; }
     .brandmark .tag {
       font-size: 14px; letter-spacing: 4px; text-transform: uppercase;
-      color: #dc972f; margin-top: 4px;
+      color: #dc972f; margin-top: 4px; font-weight: 600;
     }
 
-    /* Big editorial captions */
-    .caption {
+    /* ── Beat container — every clip uses .beat as its base ─────────── */
+    .beat {
       position: absolute;
-      left: 80px; right: 80px;
-      bottom: 200px;
-      max-width: 1200px;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 80px 240px 80px;
+      z-index: 5;
+      /* Single, simple fade-in. NO competing fade-out — hyperframes hard-
+         cuts the clip when its data-duration ends, which is what we want. */
+      opacity: 0;
+      animation: fade-in 0.8s ease-out 0.1s forwards;
+    }
+    .beat.center { justify-content: center; padding-bottom: 0; align-items: center; text-align: center; }
+
+    .eyebrow {
+      font-size: 22px; letter-spacing: 6px; text-transform: uppercase;
+      color: #dc972f; font-weight: 600; margin-bottom: 24px;
+    }
+    .headline {
       font-family: 'Fraunces', serif;
       font-weight: 700;
-      font-size: 76px;
-      line-height: 1.05;
+      font-size: 86px;
+      line-height: 1.06;
       letter-spacing: -0.01em;
-      color: #fbf8f2;
-      text-shadow: 0 4px 24px rgba(14,23,53,0.55);
+      max-width: 1500px;
+      text-shadow: 0 6px 28px rgba(14,23,53,0.55);
     }
-    .caption .ember { color: #dc972f; }
-    .caption-eyebrow {
-      font-family: 'Inter', sans-serif;
-      font-size: 22px;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      color: #dc972f;
-      margin-bottom: 18px;
-      font-weight: 600;
-    }
-    .caption-fade { animation: caption-in 0.8s ease-out both, caption-out 0.6s ease-in forwards; }
-    @keyframes caption-in {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes caption-out {
-      to { opacity: 0; transform: translateY(-16px); }
-    }
+    .headline.medium { font-size: 64px; line-height: 1.12; }
+    .ember { color: #dc972f; }
 
-    /* Three program cards animating in. */
-    .programs {
-      position: absolute;
-      left: 80px; right: 80px;
-      bottom: 240px;
+    /* ── Beat 4: three program cards ────────────────────────────────── */
+    .programs-row {
       display: flex;
       gap: 28px;
-      animation: fade-in 1s ease-out both;
+      width: 100%;
     }
     .program-card {
       flex: 1;
-      background: rgba(251,248,242,0.95);
+      background: rgba(251,248,242,0.97);
       color: #14171c;
       border-radius: 24px;
       padding: 40px 36px;
-      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.45);
+      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
       opacity: 0;
-      transform: translateY(40px);
-      animation: card-in 0.5s cubic-bezier(.2,.8,.2,1) forwards;
+      transform: translateY(28px);
+      animation: card-in 0.55s cubic-bezier(.2,.8,.2,1) forwards;
     }
-    .program-card:nth-child(1) { animation-delay: 0.2s; }
-    .program-card:nth-child(2) { animation-delay: 0.7s; }
-    .program-card:nth-child(3) { animation-delay: 1.2s; }
-    .program-card .eyebrow { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: #a8512a; font-weight: 600; }
-    .program-card h3 { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; margin-top: 12px; line-height: 1.15; }
+    .program-card .door { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: #a8512a; font-weight: 600; }
+    .program-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 32px; font-weight: 700;
+      margin-top: 12px; line-height: 1.18;
+      color: #14171c;
+    }
     .program-card .underline {
-      width: 0; height: 4px; background: #dc972f; margin-top: 18px;
-      animation: underline-grow 1s ease-out forwards;
+      width: 100%; height: 4px; background: #dc972f;
+      margin-top: 18px; transform-origin: left;
+      transform: scaleX(0);
+      animation: underline-grow 0.9s ease-out forwards;
     }
-    .program-card:nth-child(1) .underline { animation-delay: 0.7s; }
-    .program-card:nth-child(2) .underline { animation-delay: 1.2s; }
-    .program-card:nth-child(3) .underline { animation-delay: 1.7s; }
-    @keyframes underline-grow { to { width: 100%; } }
     @keyframes card-in {
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes underline-grow {
+      to { transform: scaleX(1); }
+    }
 
-    /* Map pin pulse */
-    .map-pulse {
-      position: absolute;
-      left: 80px; right: 80px;
-      bottom: 200px;
+    /* ── Beat 5: pin rows ───────────────────────────────────────────── */
+    .pin-rows {
       display: flex;
       flex-wrap: wrap;
-      gap: 28px;
-      animation: fade-in 1s ease-out both;
+      gap: 24px;
     }
     .pin-row {
       display: flex;
       align-items: center;
       gap: 14px;
       font-family: 'Inter', sans-serif;
-      font-size: 28px;
+      font-size: 30px;
+      font-weight: 500;
       color: #fbf8f2;
       background: rgba(20,23,28,0.55);
       backdrop-filter: blur(8px);
-      padding: 16px 24px;
+      padding: 18px 28px;
       border-radius: 999px;
       opacity: 0;
-      animation: pin-in 0.5s ease-out forwards;
+      transform: translateY(20px);
+      animation: card-in 0.45s ease-out forwards;
     }
-    .pin-row:nth-child(1) { animation-delay: 0.0s; }
-    .pin-row:nth-child(2) { animation-delay: 0.3s; }
-    .pin-row:nth-child(3) { animation-delay: 0.6s; }
-    .pin-row:nth-child(4) { animation-delay: 0.9s; }
     .pin-dot {
-      width: 16px; height: 16px; border-radius: 999px;
+      width: 18px; height: 18px; border-radius: 999px;
       box-shadow: 0 0 0 0 currentColor;
-      animation: pulse 2.4s ease-out infinite;
+      animation: pulse 2.4s ease-out 0.6s infinite;
     }
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 currentColor; }
       70% { box-shadow: 0 0 0 22px rgba(255,255,255,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
     }
-    @keyframes pin-in {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
 
-    /* KYR bilingual quick montage */
-    .kyr-montage {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fade-in 0.6s ease-out both;
-    }
+    /* ── Beat 6: KYR bilingual card ─────────────────────────────────── */
     .kyr-card {
       background: rgba(251,248,242,0.97);
       color: #14171c;
       padding: 56px 80px;
       border-radius: 32px;
-      max-width: 1200px;
+      max-width: 1400px;
       text-align: center;
       box-shadow: 0 40px 80px -30px rgba(0,0,0,0.6);
-      animation: kyr-in 0.6s ease-out both;
     }
-    .kyr-card .label { font-size: 14px; letter-spacing: 6px; text-transform: uppercase; color: #a8512a; font-weight: 600; }
-    .kyr-card .en { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; margin-top: 18px; line-height: 1.15; }
-    .kyr-card .es { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 500; margin-top: 14px; color: #22304d; line-height: 1.2; }
-    @keyframes kyr-in {
-      from { opacity: 0; transform: scale(0.97); }
-      to   { opacity: 1; transform: scale(1); }
+    .kyr-card .label {
+      font-size: 14px; letter-spacing: 6px; text-transform: uppercase;
+      color: #a8512a; font-weight: 600;
+    }
+    .kyr-card .en {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 56px; margin-top: 18px; line-height: 1.18; color: #14171c;
+    }
+    .kyr-card .es {
+      font-family: 'Fraunces', serif; font-weight: 500;
+      font-size: 38px; margin-top: 14px; color: #22304d; line-height: 1.22;
     }
 
-    /* Final CTA */
-    .cta {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      animation: fade-in 1s ease-out both;
-    }
-    .cta-mark { width: 220px; height: 220px; }
+    /* ── Beat 7: closing CTA ────────────────────────────────────────── */
+    .cta-mark { width: 200px; height: 200px; }
     .cta h1 {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-size: 96px;
-      margin-top: 32px;
-      color: #fbf8f2;
-      letter-spacing: -0.01em;
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 96px; margin-top: 28px;
+      color: #fbf8f2; letter-spacing: -0.01em;
+      text-shadow: 0 6px 28px rgba(14,23,53,0.55);
     }
     .cta h1 .four { color: #dc972f; }
     .cta .url {
-      font-family: 'Inter', sans-serif;
-      font-size: 36px;
-      margin-top: 24px;
-      color: #fbf8f2;
-      opacity: 0.92;
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: 36px; margin-top: 22px; color: #fbf8f2; opacity: 0.92;
     }
     .cta .phone {
-      font-family: 'Fraunces', serif;
-      font-size: 44px;
-      margin-top: 12px;
-      color: #dc972f;
-      font-weight: 600;
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 44px; margin-top: 12px; color: #dc972f;
     }
 
-    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fade-in { to { opacity: 1; } }
   </style>
 </head>
 <body>
-  <!-- Hyperframes composition: 1920x1080 @ 30fps, 60s.
-       Each clip uses data-start (s) and data-duration (s) plus a
-       data-track-index for layering. -->
+  <!--
+    Composition: 1920x1080 @ 30fps, 60s.
+    Each .beat clip is a flat fade-in only (no fade-out). Hyperframes
+    hard-cuts at the data-duration boundary, which works great when the
+    next beat fades in over the cut point.
+
+    Tracks:
+      0  — skyline backdrop (full duration)
+      1  — gradient tint (full duration)
+      5  — beats / captions (sequential)
+      8  — brand mark (full duration)
+      20 — music
+      21 — voiceover
+  -->
   <div id="stage"
        data-composition-id="j4utp-promo"
        data-start="0"
        data-duration="60"
        data-width="1920"
        data-height="1080"
-       data-fps="30"
-       style="background:#0e1735">
+       data-fps="30">
 
-    <!-- Skyline backdrop, full duration with subtle pan -->
-    <img class="clip skyline-clip"
-         src="./assets/skyline.svg"
+    <!-- Skyline backdrop. Workflow stages whichever exists at
+         public/promo/skyline.{png,jpg,svg} into ./assets/skyline-bg.png.
+         If the user provides an AI-generated PNG, that wins. -->
+    <img class="skyline"
+         src="./assets/skyline-bg.png"
          alt=""
-         data-start="0"
-         data-duration="60"
-         data-track-index="0"
-         style="width:100%; height:100%; object-fit:cover" />
+         data-start="0" data-duration="60" data-track-index="0" />
 
-    <!-- Brand mark (persistent lower-left) from 0–60 -->
-    <div class="clip brandmark"
-         data-start="0"
-         data-duration="60"
-         data-track-index="9"
-         style="opacity:1">
+    <div class="skyline-tint"
+         data-start="0" data-duration="60" data-track-index="1"></div>
+
+    <!-- Brand mark, persistent -->
+    <div class="brandmark"
+         data-start="0" data-duration="60" data-track-index="8">
       <img src="./assets/logo-loon.png" alt="" />
       <div>
         <div class="wordmark">Justice <span class="four">4</span> Us The People</div>
@@ -269,80 +257,85 @@
       </div>
     </div>
 
-    <!-- 0–4s: opening line -->
-    <div class="clip caption caption-fade"
-         data-start="0" data-duration="4" data-track-index="2"
-         style="--anim-duration: 4s; opacity:1">
-      <div class="caption-eyebrow">A neighbor-led movement · Minnesota</div>
-      In the Twin Cities, <span class="ember">neighbors look out for one another.</span>
-    </div>
-
-    <!-- 4–10s: when ordinary life breaks down -->
-    <div class="clip caption caption-fade"
-         data-start="4" data-duration="6" data-track-index="2"
-         style="opacity:1">
-      When an eviction notice lands.<br/>
-      When the fridge is empty.<br/>
-      When a court date arrives without a lawyer.
-    </div>
-
-    <!-- 10–18s: dignity -->
-    <div class="clip caption caption-fade"
-         data-start="10" data-duration="8" data-track-index="2"
-         style="opacity:1; font-size:84px">
-      Every person carries an<br/>
-      <span class="ember">unshakable dignity.</span>
-    </div>
-
-    <!-- 18–32s: three programs -->
-    <div class="clip programs"
-         data-start="18" data-duration="14" data-track-index="2"
-         style="opacity:1">
-      <div class="program-card">
-        <div class="eyebrow">Door 1</div>
-        <h3>Rental &amp; utility relief</h3>
-        <div class="underline"></div>
-      </div>
-      <div class="program-card">
-        <div class="eyebrow">Door 2</div>
-        <h3>Food on the table</h3>
-        <div class="underline"></div>
-      </div>
-      <div class="program-card">
-        <div class="eyebrow">Door 3</div>
-        <h3>Legal navigation</h3>
-        <div class="underline"></div>
+    <!-- ── BEAT 1  (0–6s) ──────────────────────────────────────────── -->
+    <div class="beat"
+         data-start="0" data-duration="6" data-track-index="5">
+      <div class="eyebrow">A neighbor-led movement · Minnesota</div>
+      <div class="headline">
+        In the Twin Cities, <span class="ember">neighbors look out for one another.</span>
       </div>
     </div>
 
-    <div class="clip caption caption-fade"
-         data-start="20" data-duration="12" data-track-index="3"
-         style="opacity:1; bottom: 720px; font-size:60px">
-      Three doors.<br/>
-      <span class="ember">One answer: you are not alone.</span>
+    <!-- ── BEAT 2  (6–14s) ─────────────────────────────────────────── -->
+    <div class="beat"
+         data-start="6" data-duration="8" data-track-index="5">
+      <div class="headline medium">
+        When an eviction notice lands.<br/>
+        When the fridge is empty.<br/>
+        <span class="ember">When a court date arrives without a lawyer.</span>
+      </div>
     </div>
 
-    <!-- 32–42s: map / community -->
-    <div class="clip map-pulse"
-         data-start="32" data-duration="10" data-track-index="2"
-         style="opacity:1">
-      <div class="pin-row" style="color:#22304d"><span class="pin-dot"></span>Legal aid clinics</div>
-      <div class="pin-row" style="color:#a8512a"><span class="pin-dot"></span>Food shelves</div>
-      <div class="pin-row" style="color:#dc972f"><span class="pin-dot"></span>Sanctuary congregations</div>
-      <div class="pin-row" style="color:#854020"><span class="pin-dot"></span>Rapid-response network</div>
+    <!-- ── BEAT 3  (14–22s) ────────────────────────────────────────── -->
+    <div class="beat"
+         data-start="14" data-duration="8" data-track-index="5">
+      <div class="headline">
+        Every person carries<br/>
+        an <span class="ember">unshakable dignity.</span>
+      </div>
     </div>
 
-    <div class="clip caption caption-fade"
-         data-start="33" data-duration="9" data-track-index="3"
-         style="opacity:1; bottom:540px; font-size:52px">
-      Immigrant-led. Community-rooted.<br/>
-      <span class="ember">We belong to one another.</span>
+    <!-- ── BEAT 4  (22–38s) — three programs ───────────────────────── -->
+    <div class="beat"
+         data-start="22" data-duration="16" data-track-index="5">
+      <div class="headline medium" style="margin-bottom: 56px;">
+        Three doors. <span class="ember">One answer: you are not alone.</span>
+      </div>
+      <div class="programs-row">
+        <div class="program-card" style="animation-delay: 0.6s">
+          <div class="door">Door 1</div>
+          <h3>Rental &amp; utility relief</h3>
+          <div class="underline" style="animation-delay: 1.2s"></div>
+        </div>
+        <div class="program-card" style="animation-delay: 1.4s">
+          <div class="door">Door 2</div>
+          <h3>Food on the table</h3>
+          <div class="underline" style="animation-delay: 2.0s"></div>
+        </div>
+        <div class="program-card" style="animation-delay: 2.2s">
+          <div class="door">Door 3</div>
+          <h3>Legal navigation</h3>
+          <div class="underline" style="animation-delay: 2.8s"></div>
+        </div>
+      </div>
     </div>
 
-    <!-- 42–52s: KYR bilingual -->
-    <div class="clip kyr-montage"
-         data-start="42" data-duration="10" data-track-index="2"
-         style="opacity:1">
+    <!-- ── BEAT 5  (38–48s) — pins ─────────────────────────────────── -->
+    <div class="beat"
+         data-start="38" data-duration="10" data-track-index="5">
+      <div class="headline medium" style="margin-bottom: 48px;">
+        Immigrant-led. Community-rooted.<br/>
+        <span class="ember">We belong to one another.</span>
+      </div>
+      <div class="pin-rows">
+        <div class="pin-row" style="color:#fbf8f2; animation-delay: 0.6s">
+          <span class="pin-dot" style="background:#22304d; color:#22304d"></span>Legal aid clinics
+        </div>
+        <div class="pin-row" style="animation-delay: 1.0s">
+          <span class="pin-dot" style="background:#a8512a; color:#a8512a"></span>Food shelves
+        </div>
+        <div class="pin-row" style="animation-delay: 1.4s">
+          <span class="pin-dot" style="background:#dc972f; color:#dc972f"></span>Sanctuary congregations
+        </div>
+        <div class="pin-row" style="animation-delay: 1.8s">
+          <span class="pin-dot" style="background:#854020; color:#854020"></span>Rapid-response network
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BEAT 6  (48–55s) — KYR bilingual ────────────────────────── -->
+    <div class="beat center"
+         data-start="48" data-duration="7" data-track-index="5">
       <div class="kyr-card">
         <div class="label">Know your rights · Conozca sus derechos</div>
         <div class="en">"I do not consent to a search."</div>
@@ -350,34 +343,20 @@
       </div>
     </div>
 
-    <!-- 52–60s: closing CTA -->
-    <div class="clip cta"
-         data-start="52" data-duration="8" data-track-index="2"
-         style="opacity:1">
+    <!-- ── BEAT 7  (55–60s) — closing CTA ──────────────────────────── -->
+    <div class="beat center cta"
+         data-start="55" data-duration="5" data-track-index="5">
       <img class="cta-mark" src="./assets/logo-loon.png" alt="" />
       <h1>Justice <span class="four">4</span> Us The People</h1>
       <div class="url">justice4usthepeople.org</div>
       <div class="phone">612 · 424 · 1785</div>
     </div>
 
-    <!-- Background music (generated by scripts/generate-promo-music.ts).
-         Volume 0.55 so the (future) voiceover stays clear. If music.wav is
-         missing, hyperframes renders silent video. -->
-    <audio
-      data-start="0"
-      data-duration="60"
-      data-track-index="20"
-      data-volume="0.55"
-      src="./music.wav"></audio>
-
-    <!-- (Optional) voiceover lands at promo/voiceover.wav and is mixed
-         on top of the music. Generate via ElevenLabs TTS or record. -->
-    <audio
-      data-start="0"
-      data-duration="60"
-      data-track-index="21"
-      data-volume="1.0"
-      src="./voiceover.wav"></audio>
+    <!-- Music + (optional) voiceover -->
+    <audio data-start="0" data-duration="60" data-track-index="20"
+           data-volume="0.55" src="./music.wav"></audio>
+    <audio data-start="0" data-duration="60" data-track-index="21"
+           data-volume="1.0" src="./voiceover.wav"></audio>
   </div>
 </body>
 </html>

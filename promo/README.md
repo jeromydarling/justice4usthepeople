@@ -51,11 +51,32 @@ mv promo/out/*.mp4 public/promo/promo.mp4
 
 ## Editing the video
 
-- **Copy / timing:** edit `composition.html`. Each on-screen element has
-  `data-start` and `data-duration` (seconds). Re-render.
-- **Skyline:** edit `public/promo/skyline.svg`. Re-render.
+- **Copy / timing:** edit `index.html`. Each beat is a `<div class="beat">`
+  with `data-start` and `data-duration` (seconds). The fade-in is just
+  `opacity 0 → 1` on a single keyframe — no fade-out — so transitions are
+  hard cuts that the next beat fades over. Re-render.
 - **Music brief:** change the `PROMPT` constant in
   `scripts/generate-promo-music.ts` and re-run music generation.
+
+## Skyline backdrop
+
+The render workflow picks the best skyline image, in this order:
+
+1. `public/promo/skyline.png` — drop your AI-generated illustration here
+2. `public/promo/skyline.jpg` — same, but JPG
+3. `public/promo/skyline.svg` — the bundled SVG fallback
+
+To upgrade to an AI-generated illustration, generate a 1920×1080 image in
+Midjourney / DALL·E / Firefly with a prompt like:
+
+> Hand-drawn watercolor illustration of the Minneapolis skyline at golden
+> hour. IDS Center, Foshay Tower, Capella Tower, and the Stone Arch Bridge
+> over the Mississippi River. Warm ember-orange and indigo color palette
+> matching brand colors `#1a2547` and `#dc972f`. Loose, expressive
+> brushstrokes. Editorial quality, dignified mood. Aspect ratio 16:9.
+
+Save it as `public/promo/skyline.png` and re-run the **Render promo video**
+workflow. The composition and the homepage modal both update automatically.
 
 ## Costs
 

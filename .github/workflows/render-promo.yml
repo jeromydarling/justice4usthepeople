@@ -47,12 +47,30 @@ jobs:
           sudo apt-get install -y ffmpeg
 
       - name: Stage assets into promo/assets/
-        # Public assets are copied into the project dir so hyperframes can
-        # resolve relative paths inside index.html.
+        # Hyperframes renders relative paths from inside the project dir.
+        # The skyline backdrop prefers a user-provided AI illustration
+        # (drop a .png or .jpg into public/promo/) and falls back to the
+        # bundled SVG converted to PNG.
         run: |
+          set -e
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
           mkdir -p promo/assets
-          cp public/promo/skyline.svg promo/assets/
           cp public/brand/logo-loon.png promo/assets/
+
+          if [ -f public/promo/skyline.png ]; then
+            cp public/promo/skyline.png promo/assets/skyline-bg.png
+            echo "Using public/promo/skyline.png"
+          elif [ -f public/promo/skyline.jpg ]; then
+            convert public/promo/skyline.jpg promo/assets/skyline-bg.png
+            echo "Using public/promo/skyline.jpg (converted to PNG)"
+          else
+            convert -density 120 -background "#0e1735" \
+              public/promo/skyline.svg \
+              -resize 1920x1080^ -gravity center -extent 1920x1080 \
+              promo/assets/skyline-bg.png
+            echo "Using bundled SVG fallback"
+          fi
           ls -lh promo/assets/
 
       - name: Generate music from ElevenLabs

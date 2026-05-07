@@ -7,6 +7,7 @@ import { site } from "@/lib/site";
 import { QuickLinks } from "@/components/admin/QuickLinks";
 import { SiteHealth } from "@/components/admin/SiteHealth";
 import { TalkToClaude } from "@/components/admin/TalkToClaude";
+import { Autopilot } from "@/components/admin/Autopilot";
 import { PromptLibrary } from "@/components/admin/PromptLibrary";
 import { Wizards } from "@/components/admin/Wizards";
 import { BrandAssets } from "@/components/admin/BrandAssets";
@@ -114,6 +115,7 @@ const TOC: { id: string; label: string }[] = [
   { id: "links", label: "Quick links" },
   { id: "health", label: "Site health" },
   { id: "talk", label: "How to talk to Claude" },
+  { id: "autopilot", label: "Autopilot prompts" },
   { id: "prompts", label: "Prompt library" },
   { id: "wizards", label: "Quick-action wizards" },
   { id: "brand", label: "Brand assets" },
@@ -171,6 +173,7 @@ function AdminConsole() {
       <QuickLinks />
       <SiteHealth />
       <TalkToClaude />
+      <Autopilot />
       <PromptLibrary />
       <Wizards />
       <BrandAssets />

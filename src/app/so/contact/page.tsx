@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SectionHeader } from "@/components/SectionHeader";
+import { site } from "@/lib/site";
 import { Arrow } from "@/components/ProgramCard";
 import { TranslationBanner } from "@/components/TranslationBanner";
-import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Nala soo xiriir",
-  description: "Soo wac, fariin noo soo dir, ama isticmaal mid ka mid ah foomamayadayada.",
+  description: "Soo wac, fariin noo soo dir, ama isticmaal mid ka mid ah foomamayadayada. Qof dhab ah ayaa kuu jawaabi doona.",
   alternates: { languages: { en: "/contact", es: "/es/contact", so: "/so/contact" } }
 };
 
@@ -15,47 +14,79 @@ export default function ContactPageSO() {
   return (
     <>
       <TranslationBanner lang="so" englishHref="/contact" />
-      <section className="container-wide py-16 md:py-20">
-        <SectionHeader
-          eyebrow="Nala soo xiriir"
-          title="Qof dhab ah ayaa kuu jawaabi doona."
-          lede="Haddii aad u baahan tahay caawimaad degdeg ah, soo wac. Wax kasta oo kale, qor — waxaan akhrinaa fariin kasta oo aan ku jawaabnaa wax ka yar 48 saac gudahooda."
-        />
+      <section className="container-page py-16 md:py-20">
+        <p className="eyebrow">Nala soo xiriir</p>
+        <h1 className="mt-2">Fariin kasta waan ka jawaabnaa.</h1>
+        <p className="mt-5 max-w-2xl text-lg text-ink-soft">
+          Habka ugu dhakhsaha badan ee aad noo soo gaadhsiisid waa
+          telefoon — laakiin haddii email ama foomkaan ay kuu fiicantahay,
+          waan helnaa. Dad dhab ah ayaa akhriya fariin walba.
+        </p>
       </section>
 
       <section className="container-wide pb-24">
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="card p-6">
-            <p className="eyebrow">Soo wac</p>
-            <h3 className="mt-2 font-serif text-xl">Khadka tooska ah</h3>
-            <p className="mt-2 text-sm text-ink-soft">
-              Mutadawiciin laba-luqadood ayaa jawaab celiya 24 saac.
-            </p>
-            <a className="btn-primary mt-4 inline-flex" href={site.contact.phoneHref}>
-              {site.contact.phone}
-            </a>
-          </div>
+        <div className="grid gap-10 md:grid-cols-12">
+          <aside className="md:col-span-5">
+            <div className="card p-6 md:p-8">
+              <h3 className="text-2xl">Khadadka tooska ah</h3>
+              <ul className="mt-4 space-y-3 text-base">
+                <li>
+                  <span className="block text-xs uppercase tracking-wider text-ink-muted">Telefoon</span>
+                  <a className="btn-link text-lg" href={site.contact.phoneHref}>
+                    {site.contact.phone}
+                  </a>
+                </li>
+                <li>
+                  <span className="block text-xs uppercase tracking-wider text-ink-muted">Email</span>
+                  <a className="btn-link" href={`mailto:${site.contact.email}`}>
+                    {site.contact.email}
+                  </a>
+                </li>
+                <li>
+                  <span className="block text-xs uppercase tracking-wider text-ink-muted">Halka</span>
+                  {site.contact.address}
+                </li>
+              </ul>
+              <hr className="my-6 border-ink/10" />
+              <p className="text-sm text-ink-muted">
+                Warbaahin, iskaashi, ama ma rabtaa inaan meel ka hadalno?
+                Ku dar mowduuca fariintaada — waxaan u dirineynaa qofka saxda ah.
+              </p>
+            </div>
+          </aside>
 
-          <div className="card p-6">
-            <p className="eyebrow">Qor</p>
-            <h3 className="mt-2 font-serif text-xl">Email</h3>
-            <p className="mt-2 text-sm text-ink-soft">
-              Arrimo aan dagdag ahayn: warbaahin, iskaashi, su'aalo bogga.
-            </p>
-            <a className="btn-link mt-4 inline-flex" href={`mailto:${site.contact.email}`}>
-              {site.contact.email} <Arrow />
-            </a>
-          </div>
+          <div className="md:col-span-7">
+            <div className="card p-6 md:p-8">
+              <p className="eyebrow">Foomka shabakada</p>
+              <h3 className="mt-2 font-serif text-2xl">Fariin noo soo dir.</h3>
+              <p className="mt-3 text-sm text-ink-soft">
+                Foomka shabakada oo buuxa (oo leh goobo magaca, email,
+                mowduuca, iyo fariinta) wali wuxuu ku qoran yahay Ingiriis.
+                Waa gaaban oo waxaan ka jawaabnaa wax ka yar 48 saac gudahooda.
+              </p>
+              <p className="mt-3 text-sm text-ink-soft">
+                Ma doortaa inaad Soomaali ku qorto? Toos email u dir{" "}
+                <a className="btn-link" href={`mailto:${site.contact.email}`}>
+                  {site.contact.email}
+                </a>
+                {" "}— waan akhrineynaa oo aan ka jawaabineynaa.
+              </p>
+              <Link href="/contact" hrefLang="en" className="btn-primary mt-5">
+                Fur foomka Ingiriisiga <Arrow />
+              </Link>
+            </div>
 
-          <div className="card p-6">
-            <p className="eyebrow">Foom</p>
-            <h3 className="mt-2 font-serif text-xl">Foomka shabakada</h3>
-            <p className="mt-2 text-sm text-ink-soft">
-              Foomka buuxa wali waa Ingiriis. Inta lagu sugayo, soo wac ama qor.
-            </p>
-            <Link href="/contact" hrefLang="en" className="btn-link mt-4 inline-flex">
-              Fur foomka <Arrow />
-            </Link>
+            <div className="card mt-6 p-6 md:p-8 ring-2 ring-ember-300">
+              <p className="eyebrow text-ember-700">Ma degdeg baa?</p>
+              <h3 className="mt-2 font-serif text-2xl">Hadda soo wac.</h3>
+              <p className="mt-3 text-sm text-ink-soft">
+                Haddii xaaladdu aanay sugin karin, soo wac khadkayaga 24-saac.
+                Mutadawiciin laba-luqadood ayaa kaa jawaabaya.
+              </p>
+              <a className="btn-primary mt-5" href={site.contact.phoneHref}>
+                {site.contact.phone}
+              </a>
+            </div>
           </div>
         </div>
       </section>
